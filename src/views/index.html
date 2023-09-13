@@ -7,13 +7,17 @@
 </head>
 <body>
     
-    <form action="" method="" onsubmit="submitForm(event)">
+    <form onsubmit="">
     
         <input type="text" id="name" placeholder="Insira seu nome">
         <input type="text" id="email" placeholder="Insira seu email">
-        <button type="submit">SUBMIT</button>
+        <button type="submit" onclick="postUser()">SUBMIT</button>
         
     </form>
+    
+    <table id="tabelaUsuarios">
+        <tbody id="tbody"> </tbody>
+    </table>
     
     <script src="./main.js"></script>
 </body>
