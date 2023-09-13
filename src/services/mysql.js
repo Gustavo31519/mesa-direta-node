@@ -7,7 +7,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  port: process.env.DB_PORT,
+ /*  port: process.env.DB_PORT, */
 });
 
 try {
@@ -19,6 +19,9 @@ try {
 
 
 const port = process.env.PORT;
-module.exports = {
-  port, db
+module.exports = { 
+  dbPromise: db.promise(), 
+  port
 };
+
+
