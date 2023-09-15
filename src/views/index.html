@@ -4,19 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+
+    <div class="container">
+        <div class="header">
+            <span>Cadastro de email</span>
+            <button id="abrirModal" class="adcionar">Adicionar</label>
+        </div>
+
+
+    <div id="meuModal" class="modal">
+        <div class='modal-content'>
+            
+            <form class="form" onsubmit="postUser()">
+                <span class="fechar">&times;</span>
+                <div class="campo">
+                    <label for="m-nome">Nome</label> 
+                    <input type="text" id="name" name="name" placeholder="Insira seu nome" required> 
+                </div>
+                <div class="campo">
+                    <label for="m-email">Email </label>
+                    <input type="email" id="email" placeholder="Insira seu email" required> 
+                </div>
+                <button type="submit" class="adcionar">Adicionar</button>
+            </form>   
+        </div>
+    </div>
     
-    <form onsubmit="">
-        <input type="text" id="name" placeholder="Insira seu nome">
-        <input type="text" id="email" placeholder="Insira seu email">
-        <button type="submit" onclick="postUser()">SUBMIT</button>
-        
-    </form>
     
-    <table id="tabelaUsuarios">
-        <tbody id="tbody"> </tbody>
+
+<div class="divTable"></div>
+    <table>
+        <thead>
+            <tr>
+             <th>Nome</th>
+             <th>Email</th>
+             <th>Editar</th>
+             <th>Excluir</th>
+             </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
     </table>
+    </div>
     
     <script src="./main.js"></script>
 </body>

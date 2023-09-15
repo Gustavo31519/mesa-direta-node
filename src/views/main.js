@@ -8,6 +8,8 @@ async function getUser() {
                   <tr>
                       <td>${user.name}</td>
                       <td>${user.email}</td>
+                      <td><button id='modal2'>Editar</>
+                      <td><button>Excluir</>
                       </tr>
                   `;
       });
@@ -30,4 +32,20 @@ async function postUser() {
   console.log(clientInformations)
 }
 getUser();
+
+
+document.getElementById("abrirModal").addEventListener("click", function () {
+  document.getElementById("meuModal").style.display = "block";
+});
+
+document.querySelector(".fechar").addEventListener("click", function () {
+  document.getElementById("meuModal").style.display = "none";
+});
+
+window.addEventListener("click", function (event) {
+  if (event.target == document.getElementById("meuModal")) {
+    document.getElementById("meuModal").style.display = "none";
+  }
+});
+
 
