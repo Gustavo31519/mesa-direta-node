@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const  db  = require("./services/mysql");
-const {allUser, insertUser} = require("./helpers/handleMysql");
+const {allUser, insertUser, updateUser} = require("./helpers/handleMysql");
 const routes = Router();
 
 routes.get("/select", async (req, res) => {
@@ -24,8 +24,24 @@ routes.post("/receber", async (req, res) => {
   }
 });
 
+routes.post("/update", async (req, res) => {
+  const clientUpdateInformations = req.body.clientUpdateInformations;
+  console.log("Informação recebida " + clientUpdateInformations);
 
+    try {
+      const result = await db.dbPromise.query(updateUser, [
+        clientUpdateInformations[2],
+        clientUpdateInformations[3],
+        clientUpdateInformations[0],
+        clientUpdateInformations[1]
+      ]);
+    } catch (e) {
+      console.error("Erro interno do servidor:", e);
+    }
+
+
+
+})
+
+  
 module.exports = routes
-
-
-

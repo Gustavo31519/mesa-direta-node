@@ -1,4 +1,4 @@
-.modal {
+.modal, .modal2 {
     display: none;
     position: absolute;
     top: 0%;
@@ -8,15 +8,6 @@
     background-color: rgba(0,0,0,0.5);
 }
 
-.modal2 {
-    display: none;
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
 
 .modal-content {
     background-color: #fefefe;
@@ -26,7 +17,7 @@
     width: 50%;
 }
 
-.fechar {
+.fechar, .fechar2 {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -34,7 +25,9 @@
 }
 
 .fechar:hover,
-.fechar:focus {
+.fechar:focus,
+.fechar2:hover,
+.fechar2:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -159,4 +152,18 @@ input[type="email"] {
 
 .adcionar:hover  {
     background-color: #45a049;
+}
+
+.atualizar {
+  background-color: #3E92CC;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.atualizar:hover {
+   background-color: #225f7e;
 }
