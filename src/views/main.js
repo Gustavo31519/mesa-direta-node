@@ -48,8 +48,8 @@ window.addEventListener("click", (event) => {
   }
 });
 
-var lastEmail
-var lastName
+let lastEmail
+let lastName
 
 function modal2(button) {
   document.getElementById('meuModal2').style.display = "block"
@@ -59,7 +59,7 @@ function modal2(button) {
     if (event.target == document.getElementById("meuModal2")) {
       document.getElementById("meuModal2").style.display = "none"}})
 
-        var row = button.parentNode.parentNode;
+        let row = button.parentNode.parentNode;
         lastName = row.getElementsByTagName("td")[0].innerText;
         lastEmail = row.getElementsByTagName("td")[1].innerText;
       }

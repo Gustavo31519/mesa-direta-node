@@ -16,7 +16,7 @@ routes.post("/receber", async (req, res) => {
   console.log("Informação recebida " + clientInformations);
 
   try {
-    const result = await db.dbPromise.query(insertUser,
+    await db.dbPromise.query(insertUser,
       [clientInformations[0], clientInformations[1]]
     );
   } catch (e) {
@@ -29,7 +29,7 @@ routes.post("/update", async (req, res) => {
   console.log("Informação recebida " + clientUpdateInformations);
 
     try {
-      const result = await db.dbPromise.query(updateUser, [
+      await db.dbPromise.query(updateUser, [
         clientUpdateInformations[2],
         clientUpdateInformations[3],
         clientUpdateInformations[0],
