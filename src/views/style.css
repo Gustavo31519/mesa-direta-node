@@ -42,8 +42,12 @@
 .container {
   width: 90%;
   height: 80%;
-  border-radius: 10px;
   background: white;
+
+
+  justify-content: center;
+  align-items: center;
+   margin: 0 auto; 
 }
 
 
@@ -87,19 +91,6 @@ thead tr th {
 tbody tr {
   margin-bottom: 50px;
 }
-
-thead tr th.acao {
-  width: 100px!important;
-  text-align: center;
-}
-
-tbody tr td.acao {
-  text-align: center;
-}
-
-  thead tr th.acao {
-    width: auto!important;
-  }
   
   td button i {
     font-size: 20px!important;
@@ -166,4 +157,18 @@ input[type="email"] {
 
 .atualizar:hover {
    background-color: #225f7e;
+}
+
+.excluir {
+    background-color: #FF4444;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.excluir:hover {
+  background-color: #FF2222
 }

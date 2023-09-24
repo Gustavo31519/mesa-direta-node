@@ -35,16 +35,15 @@
 
     <div id="meuModal2" class="modal2">
         <div class='modal-content'>
-            
-            <form class="form" onsubmit="updateUser()">
+            <form class="form" id="upForm" onsubmit="updateUser()">
                 <span class="fechar2">&times;</span>
                 <div class="campo">
                     <label for="m-nome">Nome</label> 
-                    <input type="text" id="upName" name="name" placeholder="Insira seu nome" required> 
+                    <input type="text" id="upName" name="name" placeholder="Insira seu nome"> 
                 </div>
                 <div class="campo">
                     <label for="m-email">Email </label>
-                    <input type="email" id="upEmail" placeholder="Insira seu email" required> 
+                    <input type="email" id="upEmail" placeholder="Insira seu email"> 
                 </div>
                 <button type="submit" class="atualizar">Atualizar</button>
             </form>   
