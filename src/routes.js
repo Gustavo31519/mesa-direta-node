@@ -58,5 +58,15 @@ routes.post("/delete", async (req,res) => {
     }
 })
 
-  
+/* routes.get('/sendmail', (req, res) => {
+  let mailOptions = {
+    from:,
+    to:,
+    subject:,
+    html:,
+  }
+
+  smtp
+}) */
+
 module.exports = routes

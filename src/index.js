@@ -1,6 +1,7 @@
 const express = require("express");
 const routes = require("./routes");
 const { port } = require("./services/mysql");
+const smtp = require("./services/smtp")
 const cors = require("cors")
 
 
