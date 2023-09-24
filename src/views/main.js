@@ -122,9 +122,9 @@ function updateUser() {
 
   await new Promise((resolve) => setTimeout(resolve, 200));
   await getUser()
-} 
- else {
-    alert("O item foi excluído com sucesso!");}
-}
+}}
+
+
+
 
 
