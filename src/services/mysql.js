@@ -16,9 +16,8 @@ try {
 } catch (err) {
   console.error("Erro ao conectar ao banco de dados:", err);
 }
-
-
 const port = process.env.PORT;
+
 module.exports = { 
   dbPromise: db.promise(), 
   port

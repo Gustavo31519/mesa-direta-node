@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+  <title>Seletor de Opções Personalizado</title>
+</head>
+<link rel="stylesheet" href="./style.css" />
+
+<body>
+
+<div id="header"></div>
+
+
+
+
+    <form action="" onsubmit="sendMail()">
+
+        <div>
+            <label for="" style="font-size: 25px;">
+                Envio de email
+            </label>
+        </div>
+        <div>
+          <label for="">Remetente</label>
+          <input type="text" name="" id="from" value="kanesipoloco@outlook.com"/>
+        </div>
+      
+        <div>
+            <label for="">Para</label>
+          <div class="custom-selector" onclick="toggleOptions()">
+            Selecione Opções
+          </div>
+          <ul class="options-list" id="optionsList" style="display: none">
+            <li>
+              <input
+                type="text"
+                id="search"
+                oninput="filterOptions()"
+                onclick="event.stopPropagation()"
+              />
+          </ul>
+
+         
+        </div>
+      
+        <div>
+          <label for="">Assunto</label>
+          <input type="text" name="" id="subject" />
+        </div>
+      
+        <div>
+          <label for="">Corpo</label>
+          <textarea name="" id="html" cols="30" rows="10"></textarea>
+        </div>
+      
+        <button type="submit" >Enviar email</button>
+    </form>
+
+  <script src="./send.js"></script>
+</body>

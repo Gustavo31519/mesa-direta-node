@@ -124,7 +124,6 @@ function updateUser() {
   await getUser()
 }}
 
-
-
-
-
+fetch("http://localhost:3333/header")
+  .then((response) => response.text())
+  .then((data) => (document.getElementById("header").innerHTML = data));

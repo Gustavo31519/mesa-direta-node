@@ -1,3 +1,12 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+      margin-top: 8px;
+
+}
+
+
 .modal, .modal2 {
     display: none;
     position: absolute;
@@ -34,8 +43,8 @@
 }
 
 .header span {
-  font-weight: 900;
-  font-size: 20px;
+  font-weight: bold;
+  font-size: 25px;
   word-break: break-all;
 }
 
@@ -45,9 +54,17 @@
   background: white;
 
 
+
   justify-content: center;
   align-items: center;
    margin: 0 auto; 
+
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc; 
+    background-color: #f9f9f9;
+    margin-top: 8px;
 }
 
 
@@ -62,7 +79,7 @@
 table {
   width: 100%;
   border-spacing: 10px;
-  word-break: break-all;
+  word-break: break-all; 
   border-collapse: collapse;
 }
 
@@ -73,6 +90,7 @@ thead {
 
 tr {
   border-bottom: 1px solid rgb(238, 235, 235)!important;
+  
 }
 
 tbody tr td {
@@ -86,6 +104,7 @@ thead tr th {
   padding: 5px;
   text-align: start;
   margin-bottom: 50px;
+  
 }
 
 tbody tr {
@@ -103,11 +122,12 @@ tbody tr {
 
 .form {
    max-width: 100%;
-    margin: 0 auto;
+    margin: 5px auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
 }
 
 .campo {

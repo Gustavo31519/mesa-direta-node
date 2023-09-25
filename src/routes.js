@@ -2,6 +2,8 @@ const { Router } = require("express");
 const  db  = require("./services/mysql");
 const {allUser, insertUser, updateUser, deleteUser} = require("./helpers/handleMysql");
 const routes = Router();
+const smtp = require("./services/smtp");
+const path = require("path");
 
 routes.get("/select", async (req, res) => {
   try {
@@ -58,15 +60,31 @@ routes.post("/delete", async (req,res) => {
     }
 })
 
-/* routes.get('/sendmail', (req, res) => {
+routes.post('/sendmail', (req, res) => {
+  const emailInformations = req.body.emailInformations
+  console.log(emailInformations)
+  
   let mailOptions = {
-    from:,
-    to:,
-    subject:,
-    html:,
+    from: emailInformations.from,
+    to: emailInformations.to,
+    subject: emailInformations.subject,
+    html: emailInformations.html,
   }
+    smtp.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Erro ao enviar o e-mail.");
+    } else {
+      console.log("E-mail enviado: " + info.response);
+      res.send("E-mail enviado com sucesso!");
+    }
+  });
+})
 
-  smtp
-}) */
+routes.get('/header', (req,res) => {
+  res.sendFile(path.join(__dirname, '/views/header.html'))
+})
+
+
 
 module.exports = routes
