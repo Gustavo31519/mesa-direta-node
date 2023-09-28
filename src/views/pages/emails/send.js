@@ -9,20 +9,6 @@ function toggleOption(option) {
   option.classList.toggle("selected");
 
 
-/*       const selected = document.querySelector(".selected");
-    const sibling = selected.nextElementSibling; */
-    
-/*     if (selected && sibling) {
-        const text = sibling.innerText;
-        to = [text];
-        document.querySelector(".custom-selector").innerText = to.join(", ");
-    }
-
-    if (document.querySelector(".custom-selector").innerText === "") {
-        document.querySelector(".custom-selector").innerText = "Selecione Opções";
-    }
-} */
-
   to = Array.from(document.getElementsByClassName("selected")).map(
     (option) => option.nextElementSibling.innerText
   );
@@ -64,7 +50,6 @@ if (optionText.includes(inputValue)) {
   });
 }
 
-
 let to;
 function sendMail() {
     const { from, subject, html } = document.forms[0].elements;
@@ -88,7 +73,6 @@ function sendMail() {
 
 async function getUser() {
   let ul = document.querySelector("ul");
-    /* ul.innerHTML = ""; */
   await fetch("http://localhost:3333/select")
     .then((res) => res.json())
     .then((dados) => {

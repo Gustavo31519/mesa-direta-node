@@ -1,9 +1,13 @@
 const { Router } = require("express");
 const  db  = require("./services/mysql");
-const {allUser, insertUser, updateUser, deleteUser} = require("./helpers/handleMysql");
+const {allUser, insertUser, updateUser, deleteUser, insertXlsxUser} = require("./helpers/handleMysql");
 const routes = Router();
 const smtp = require("./services/smtp");
 const path = require("path");
+const multer = require("multer");
+const uploadArchive = require("./helpers/xls");
+const upload = multer({ dest: "uploads/" });
+const fs = require("fs");
 
 routes.get("/select", async (req, res) => {
   try {
@@ -81,10 +85,32 @@ routes.post('/sendmail', (req, res) => {
   });
 })
 
-routes.get('/header', (req,res) => {
+routes.get('/header',  (req,res) => {
   res.sendFile(path.join(__dirname, '/views/header.html'))
 })
 
+routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
+  try {
+    const file = req.file;
+    console.log("arquivo recebido", file);
 
+    const values = await uploadArchive(file.path);
+
+    await db.dbPromise.query(insertXlsxUser + values);
+
+     fs.unlink(file.path, (err) => {
+       if (err) {
+         console.error("Erro ao excluir o arquivo:", err);
+       } else {
+         console.log("Arquivo excluído com sucesso");
+       }
+     });
+
+    res.json({ message: "Arquivo enviado com sucesso!" });
+  } catch (error) {
+    console.error("Erro interno do servidor:", error);
+    res.status(500).send("Erro interno do servidor");
+  }
+});
 
 module.exports = routes

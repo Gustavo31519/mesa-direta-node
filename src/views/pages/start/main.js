@@ -15,7 +15,8 @@ async function getUser() {
       });
     })
     .catch((error) => console.log(error));
-} getUser();
+}
+getUser();
 
 async function postUser() {
   const clientInformations = [
@@ -32,7 +33,6 @@ async function postUser() {
 
   console.log(clientInformations);
 }
-
 
 document.getElementById("abrirModal").addEventListener("click", () => {
   document.getElementById("meuModal").style.display = "block";
@@ -68,7 +68,7 @@ function modal2(button) {
 }
 
 function updateUser() {
-  console.log("HELLO WORD")
+  console.log("HELLO WORD");
 
   let upName = document.getElementById("upName").value;
   let upEmail = document.getElementById("upEmail").value;
@@ -86,11 +86,11 @@ function updateUser() {
     lastName,
     lastEmail,
     upName,
-    upEmail , 
+    upEmail,
     updatedAt,
-  ] 
-  
-  console.log(clientUpdateInformations)
+  ];
+
+  console.log(clientUpdateInformations);
 
   fetch("http://localhost:3333/update", {
     method: "POST",
@@ -100,30 +100,54 @@ function updateUser() {
   console.log(clientUpdateInformations);
 }
 
- async function deleter(button) {
+async function deleter(button) {
   let confirmacao = confirm("Tem certeza que deseja excluir?");
   if (confirmacao) {
     let row = button.parentNode.parentNode;
     lastName = row.getElementsByTagName("td")[0].innerText;
     lastEmail = row.getElementsByTagName("td")[1].innerText;
 
-    const clientDeleteInformations = [
-      lastName,
-      lastEmail
-    ] 
-    console.log(clientDeleteInformations)
+    const clientDeleteInformations = [lastName, lastEmail];
+    console.log(clientDeleteInformations);
 
-      fetch("http://localhost:3333/delete", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ clientDeleteInformations }),
-  });
-  console.log(clientDeleteInformations);
+    fetch("http://localhost:3333/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientDeleteInformations }),
+    });
+    console.log(clientDeleteInformations);
 
-  await new Promise((resolve) => setTimeout(resolve, 200));
-  await getUser()
-}}
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    await getUser();
+  }
+}
 
 fetch("http://localhost:3333/header")
   .then((response) => response.text())
   .then((data) => (document.getElementById("header").innerHTML = data));
+
+function upload() {
+  let importation = document.getElementById("upload").files[0];
+  if (importation) {
+    let confirmation = confirm(
+      `Quer fazer a importação de ${importation.name}?`
+    );
+    if (confirmation) {
+      const formData = new FormData();
+      formData.append("file", importation);
+
+      fetch("http://localhost:3333/upload-xlsx", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Arquivo enviado com sucesso:", data);
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar arquivo:", error);
+        });
+    }
+  }
+  console.log(importation);
+}

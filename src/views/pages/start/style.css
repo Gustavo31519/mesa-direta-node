@@ -151,6 +151,7 @@ input[type="email"] {
     box-sizing: border-box;
 }
 
+
 .adcionar {
     background-color: #4caf50;
     color: #fff;
@@ -191,4 +192,23 @@ input[type="email"] {
 
 .excluir:hover {
   background-color: #FF2222
+}
+
+
+.file[type="file"] {
+    display: none;
+}
+
+.filelabel {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.filelabel:hover {
+    background-color: #45a049;
 }
