@@ -94,7 +94,7 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
     const file = req.file;
     console.log("arquivo recebido", file);
 
-    const values = await uploadArchive(file.path);
+    const values = uploadArchive(file.path);
 
     await db.dbPromise.query(insertXlsxUser + values);
 
