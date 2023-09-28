@@ -8,6 +8,8 @@ const multer = require("multer");
 const uploadArchive = require("./helpers/xls");
 const upload = multer({ dest: "uploads/" });
 const fs = require("fs");
+const cron = require("node-cron");
+const cronDate = require("./services/crom");
 
 routes.get("/select", async (req, res) => {
   try {
@@ -73,17 +75,31 @@ routes.post('/sendmail', (req, res) => {
     to: emailInformations.to,
     subject: emailInformations.subject,
     html: emailInformations.html,
+   
   }
-    smtp.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send("Erro ao enviar o e-mail.");
-    } else {
-      console.log("E-mail enviado: " + info.response);
-      res.send("E-mail enviado com sucesso!");
-    }
-  });
-})
+
+  
+  if(emailInformations.date) {
+    cron.schedule(cronDate(emailInformations.date), () => {
+      smtp.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send("Erro ao enviar o e-mail.");
+        } else {
+          console.log("E-mail enviado: " + info.response);
+          res.send("E-mail enviado com sucesso!");
+        }
+      });
+    });
+  }
+  else {
+    smtp.sendMail(mailOptions)
+    console.log("https://localhost:3333/tracker", track)
+  }
+  }) 
+
+
+
 
 routes.get('/header',  (req,res) => {
   res.sendFile(path.join(__dirname, '/views/header.html'))
@@ -112,5 +128,6 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
     res.status(500).send("Erro interno do servidor");
   }
 });
+
 
 module.exports = routes

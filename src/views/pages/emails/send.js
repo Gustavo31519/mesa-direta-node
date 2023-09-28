@@ -52,12 +52,13 @@ if (optionText.includes(inputValue)) {
 
 let to;
 function sendMail() {
-    const { from, subject, html } = document.forms[0].elements;
+    const { from, subject, html, date } = document.forms[0].elements;
   const emailInformations = {
     from: from.value,
     to,
     subject: subject.value,
     html: html.value,
+    date: date.value
   };
 
   console.log(emailInformations)
