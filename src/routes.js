@@ -1,6 +1,12 @@
 const { Router } = require("express");
-const  db  = require("./services/mysql");
-const {allUser, insertUser, updateUser, deleteUser, insertXlsxUser} = require("./helpers/handleMysql");
+const db = require("./services/mysql");
+const {
+  allUser,
+  insertUser,
+  updateUser,
+  deleteUser,
+  insertXlsxUser,
+} = require("./helpers/handleMysql");
 const routes = Router();
 const smtp = require("./services/smtp");
 const path = require("path");
@@ -13,10 +19,10 @@ const cronDate = require("./services/crom");
 
 routes.get("/select", async (req, res) => {
   try {
-     res.json((await db.dbPromise.query(allUser))[0]);
+    res.json((await db.dbPromise.query(allUser))[0]);
   } catch (e) {
     res.status(500).json({ message: "Erro interno do servidor" });
-  } 
+  }
 });
 
 routes.post("/receber", async (req, res) => {
@@ -24,9 +30,11 @@ routes.post("/receber", async (req, res) => {
   console.log("Informação recebida " + clientInformations);
 
   try {
-    await db.dbPromise.query(insertUser,
-      [clientInformations[0], clientInformations[1], clientInformations[2]]
-    );
+    await db.dbPromise.query(insertUser, [
+      clientInformations[0],
+      clientInformations[1],
+      clientInformations[2],
+    ]);
   } catch (e) {
     console.error("Erro interno do servidor:", e);
     res.status(500).send("Erro interno do servidor");
@@ -37,73 +45,68 @@ routes.post("/update", async (req, res) => {
   const clientUpdateInformations = req.body.clientUpdateInformations;
   console.log("Informação recebida " + clientUpdateInformations);
 
-    try {
-      await db.dbPromise.query(updateUser, [
-        clientUpdateInformations[2],
-        clientUpdateInformations[3],
-        clientUpdateInformations[4],
-        clientUpdateInformations[0],
-        clientUpdateInformations[1]
-      ]);
-    } catch (e) {
-      console.error("Erro interno do servidor:", e);
-      res.status(500).send("Erro interno do servidor");
-    }
-})
+  try {
+    await db.dbPromise.query(updateUser, [
+      clientUpdateInformations[2],
+      clientUpdateInformations[3],
+      clientUpdateInformations[4],
+      clientUpdateInformations[0],
+      clientUpdateInformations[1],
+    ]);
+  } catch (e) {
+    console.error("Erro interno do servidor:", e);
+    res.status(500).send("Erro interno do servidor");
+  }
+});
 
-routes.post("/delete", async (req,res) => {
-    const clientDeleteInformations = req.body.clientDeleteInformations;
-    console.log("Informação recebida " + clientDeleteInformations);
+routes.post("/delete", async (req, res) => {
+  const clientDeleteInformations = req.body.clientDeleteInformations;
+  console.log("Informação recebida " + clientDeleteInformations);
 
-    try {
-      await db.dbPromise.query(deleteUser, [
-        clientDeleteInformations[0],
-        clientDeleteInformations[1]
-      ]);
-    } catch (e) {
-      console.error("Erro interno do servidor:", e);
-      res.status(500).send("Erro interno do servidor");
-    }
-})
+  try {
+    await db.dbPromise.query(deleteUser, [
+      clientDeleteInformations[0],
+      clientDeleteInformations[1],
+    ]);
+  } catch (e) {
+    console.error("Erro interno do servidor:", e);
+    res.status(500).send("Erro interno do servidor");
+  }
+});
 
-routes.post('/sendmail', (req, res) => {
-  const emailInformations = req.body.emailInformations
-  console.log(emailInformations)
-  
+routes.post("/sendmail", (req, res) => {
+  const emailInformations = req.body.emailInformations;
+  console.log(emailInformations);
+
   let mailOptions = {
     from: emailInformations.from,
     to: emailInformations.to,
     subject: emailInformations.subject,
     html: emailInformations.html,
-   
-  }
+  };
 
-  
-  if(emailInformations.date) {
-    cron.schedule(cronDate(emailInformations.date), () => {
-      smtp.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          res.status(500).send("Erro ao enviar o e-mail.");
-        } else {
-          console.log("E-mail enviado: " + info.response);
-          res.send("E-mail enviado com sucesso!");
-        }
-      });
-    });
-  }
-  else {
-    smtp.sendMail(mailOptions)
-    console.log("https://localhost:3333/tracker", track)
-  }
-  }) 
+ if (isNaN(Date.parse(emailInformations.date))) {
+   smtp.sendMail(mailOptions, (error, info) => {
+    console.log("Enviado")
+   });
+ } else {
+   cron.schedule(cronDate(emailInformations.date), () => {
+     smtp.sendMail(mailOptions, (error, info) => {
+       if (error) {
+         console.log(error);
+         res.status(500).send("Erro ao enviar o e-mail.");
+       } else {
+         console.log("E-mail enviado: " + info.response);
+         res.send("E-mail enviado com sucesso!");
+       }
+     });
+   });
+ }
+});
 
-
-
-
-routes.get('/header',  (req,res) => {
-  res.sendFile(path.join(__dirname, '/views/header.html'))
-})
+routes.get("/header", (req, res) => {
+  res.sendFile(path.join(__dirname, "/views/header.html"));
+});
 
 routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
   try {
@@ -114,13 +117,13 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
 
     await db.dbPromise.query(insertXlsxUser + values);
 
-     fs.unlink(file.path, (err) => {
-       if (err) {
-         console.error("Erro ao excluir o arquivo:", err);
-       } else {
-         console.log("Arquivo excluído com sucesso");
-       }
-     });
+    fs.unlink(file.path, (err) => {
+      if (err) {
+        console.error("Erro ao excluir o arquivo:", err);
+      } else {
+        console.log("Arquivo excluído com sucesso");
+      }
+    });
 
     res.json({ message: "Arquivo enviado com sucesso!" });
   } catch (error) {
@@ -129,5 +132,11 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
   }
 });
 
+routes.get("/start", (req, res) => {
+  res.sendFile(path.join(__dirname, "views/pages/start/index.html"));
+});
+routes.get("/emails", (req, res) => {
+  res.sendFile(path.join(__dirname, "views/pages/emails/index.html"));
+});
 
-module.exports = routes
+module.exports = routes;
