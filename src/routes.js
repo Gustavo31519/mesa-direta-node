@@ -143,7 +143,7 @@ routes.post("/auth", auth, async (req, res) => {
 });
 
 routes.use("/start", auth,  express.static(path.join(__dirname, "views/pages/start")));
-routes.use("/emails", auth, express.static(path.join(__dirname, "views/pages/emails")));
+routes.use("/emails", /* auth, */ express.static(path.join(__dirname, "views/pages/emails")));
 routes.use("/login", express.static(path.join(__dirname, "views/pages/login")))
 
 

@@ -33,13 +33,11 @@ document.addEventListener("click", function (event) {
 
 function filterOptions() {
   const inputValue = document
-    ./* querySelector('input[type="text"]:nth-of-type(2)') */getElementById("search")
+    .getElementById("search")
     .value.toLowerCase();
   const options = document.querySelectorAll(".option");
-  console.log("Input Value:", inputValue);
   options.forEach((option) => {
     const optionText = option.innerText.toLowerCase();
-    console.log("Option Text:", optionText); 
 if (optionText.includes(inputValue)) {
   if (!option.hasAttribute("hidden")) {
     option.style.display = "block";
@@ -49,6 +47,11 @@ if (optionText.includes(inputValue)) {
 }
   });
 }
+
+
+
+
+
 
 let to;
 function sendMail() {
@@ -75,17 +78,17 @@ function sendMail() {
 async function getUser() {
   let ul = document.querySelector("ul");
   await fetch("/select")
-    .then((res) => res.json())
-    .then((dados) => {
-      dados.forEach((user) => {
-        ul.innerHTML += `
-        <li class="option" onclick="toggleOption(this)">${user.name}</li>
-        <li style="display: none !important;" hidden=true class="option" onclick="toggleOption(this)">${user.email}</li>
-        
-        `;
-      });
-    })
-    .catch((error) => console.log(error));
+  .then((res) => res.json())
+  .then((dados) => {
+    dados.forEach((user) => {
+      ul.innerHTML += `
+      <li class="option" onclick="toggleOption(this)">${user.name}</li>
+      <li style="display: none !important;" hidden=true class="option" onclick="toggleOption(this)">${user.email}</li>
+      
+      `;
+    });
+  })
+  .catch((error) => console.log(error));
 }
 getUser()
 
