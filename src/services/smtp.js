@@ -11,14 +11,14 @@ const smtp = nodemailer.createTransport({
     }
 })
 
-smtp.verify((error, success) => {
+/* smtp.verify((error, success) => {
   if (error) {
     console.log(error);
   } else {
     console.log("A conexão com o servidor SMTP está funcionando corretamente.");
   }
 });
-
+ */
 
 
 

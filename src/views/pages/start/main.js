@@ -1,6 +1,6 @@
 async function getUser() {
   tbody.innerHTML = "";
-  await fetch("http://localhost:3333/select")
+  await fetch("/select")
     .then((res) => res.json())
     .then((dados) => {
       dados.forEach((user) => {
@@ -18,20 +18,23 @@ async function getUser() {
 }
 getUser();
 
-async function postUser() {
+async function postUser(event) {
+  event.preventDefault();
+
   const clientInformations = [
     document.getElementById("name").value,
     document.getElementById("email").value,
     new Date().toISOString().slice(0, 19).replace("T", " "),
   ];
 
-  fetch("http://localhost:3333/receber", {
+  fetch("/receber", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ clientInformations }),
   });
 
   console.log(clientInformations);
+  location.reload();
 }
 
 document.getElementById("abrirModal").addEventListener("click", () => {
@@ -67,8 +70,8 @@ function modal2(button) {
   lastEmail = row.getElementsByTagName("td")[1].innerText;
 }
 
-function updateUser() {
-  console.log("HELLO WORD");
+function updateUser(event) {
+  event.preventDefault();
 
   let upName = document.getElementById("upName").value;
   let upEmail = document.getElementById("upEmail").value;
@@ -92,12 +95,13 @@ function updateUser() {
 
   console.log(clientUpdateInformations);
 
-  fetch("http://localhost:3333/update", {
+  fetch("/update", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ clientUpdateInformations }),
   });
   console.log(clientUpdateInformations);
+  location.reload();
 }
 
 async function deleter(button) {
@@ -110,7 +114,7 @@ async function deleter(button) {
     const clientDeleteInformations = [lastName, lastEmail];
     console.log(clientDeleteInformations);
 
-    fetch("http://localhost:3333/delete", {
+    fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ clientDeleteInformations }),
@@ -122,7 +126,7 @@ async function deleter(button) {
   }
 }
 
-fetch("http://localhost:3333/header")
+fetch("/header")
   .then((response) => response.text())
   .then((data) => (document.getElementById("header").innerHTML = data));
 
@@ -136,7 +140,7 @@ function upload() {
       const formData = new FormData();
       formData.append("file", importation);
 
-      fetch("http://localhost:3333/upload-xlsx", {
+      fetch("/upload-xlsx", {
         method: "POST",
         body: formData,
       })

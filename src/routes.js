@@ -16,6 +16,10 @@ const upload = multer({ dest: "uploads/" });
 const fs = require("fs");
 const cron = require("node-cron");
 const cronDate = require("./services/crom");
+const express = require ("express");
+const auth = require("./middlewares/auth");
+
+
 
 routes.get("/select", async (req, res) => {
   try {
@@ -85,23 +89,23 @@ routes.post("/sendmail", (req, res) => {
     html: emailInformations.html,
   };
 
- if (isNaN(Date.parse(emailInformations.date))) {
-   smtp.sendMail(mailOptions, (error, info) => {
-    console.log("Enviado")
-   });
- } else {
-   cron.schedule(cronDate(emailInformations.date), () => {
-     smtp.sendMail(mailOptions, (error, info) => {
-       if (error) {
-         console.log(error);
-         res.status(500).send("Erro ao enviar o e-mail.");
-       } else {
-         console.log("E-mail enviado: " + info.response);
-         res.send("E-mail enviado com sucesso!");
-       }
-     });
-   });
- }
+  if (isNaN(Date.parse(emailInformations.date))) {
+    smtp.sendMail(mailOptions, (error, info) => {
+      console.log("Enviado");
+    });
+  } else {
+    cron.schedule(cronDate(emailInformations.date), () => {
+      smtp.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send("Erro ao enviar o e-mail.");
+        } else {
+          console.log("E-mail enviado: " + info.response);
+          res.send("E-mail enviado com sucesso!");
+        }
+      });
+    });
+  }
 });
 
 routes.get("/header", (req, res) => {
@@ -132,11 +136,15 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
   }
 });
 
-routes.get("/start", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/pages/start/index.html"));
+routes.use(express.urlencoded({ extended: true }));
+
+routes.post("/auth", auth, async (req, res) => {
+  res.redirect("/start");
 });
-routes.get("/emails", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/pages/emails/index.html"));
-});
+
+routes.use("/start", auth,  express.static(path.join(__dirname, "views/pages/start")));
+routes.use("/emails", auth, express.static(path.join(__dirname, "views/pages/emails")));
+routes.use("/login", express.static(path.join(__dirname, "views/pages/login")))
+
 
 module.exports = routes;

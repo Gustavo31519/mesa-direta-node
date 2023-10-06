@@ -26,7 +26,7 @@
     <div id="meuModal" class="modal">
         <div class='modal-content'>
             
-            <form class="form" onsubmit="postUser()">
+            <form class="form" onsubmit="postUser(event)" >
                 <span class="fechar">&times;</span>
                 <div class="campo">
                     <label for="m-nome">Nome</label> 
@@ -43,7 +43,7 @@
 
     <div id="meuModal2" class="modal2">
         <div class='modal-content'>
-            <form class="form" id="upForm" onsubmit="updateUser()">
+            <form class="form" id="upForm" onsubmit="updateUser(event)">
                 <span class="fechar2">&times;</span>
                 <div class="campo">
                     <label for="m-nome">Nome</label> 

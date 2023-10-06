@@ -63,7 +63,7 @@ function sendMail() {
 
   console.log(emailInformations)
 
-  fetch("http://localhost:3333/sendmail", {
+  fetch("/sendmail", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ emailInformations }),
@@ -74,7 +74,7 @@ function sendMail() {
 
 async function getUser() {
   let ul = document.querySelector("ul");
-  await fetch("http://localhost:3333/select")
+  await fetch("/select")
     .then((res) => res.json())
     .then((dados) => {
       dados.forEach((user) => {
@@ -89,6 +89,6 @@ async function getUser() {
 }
 getUser()
 
-fetch("http://localhost:3333/header")
+fetch("/header")
   .then((response) => response.text())
   .then((data) => (document.getElementById("header").innerHTML = data));
