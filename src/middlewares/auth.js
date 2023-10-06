@@ -8,12 +8,12 @@ const auth = (req, res, next) => {
     username === process.env.SIGN_USER &&
     password === process.env.SIGN_PASS
   ) {
-    c = true;
+    req.session.authenticated = true;
     
   }
   if (req.session.authenticated) {
     next();
-     console.log("Hello World");
+    console.log("Hello World");
   } else {
     res.redirect("/login");
     console.log("Senha Incorreta");
