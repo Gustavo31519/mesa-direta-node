@@ -3,6 +3,7 @@
   <title>Seletor de Opções Personalizado</title>
 </head>
 <link rel="stylesheet" href="./style.css" />
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <body>
 
@@ -20,7 +21,7 @@
         </div>
         <div>
           <label for="">Remetente</label>
-          <input type="text" name="" id="from" value=""/>
+          <input type="text" name="from" id="from" value=""/>
         </div>
       
         <div>
@@ -46,9 +47,8 @@
           <input type="text" name="" id="subject" />
         </div>
         
-        <div>
-          <label for="">Corpo</label>
-          <textarea name="" id="html" cols="30" rows="10"></textarea>
+        <div id="textarea">
+          <div id="editor"></div>
         </div>
         
         <div>
@@ -60,5 +60,9 @@
       
     </form>
 
-  <script src="./send.js"></script>
+
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="./send.js"></script>
+
 </body>
