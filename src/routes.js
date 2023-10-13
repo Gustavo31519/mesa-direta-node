@@ -90,9 +90,15 @@ routes.post("/sendmail", (req, res) => {
   };
 
   if (isNaN(Date.parse(emailInformations.date))) {
-    smtp.sendMail(mailOptions, (error, info) => {
-      console.log("Enviado");
-    });
+      smtp.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send("Erro ao enviar o e-mail.");
+        } else {
+          console.log("E-mail enviado: " + info.response);
+          res.send("E-mail enviado com sucesso!");
+        }
+      });
   } else {
     cron.schedule(cronDate(emailInformations.date), () => {
       smtp.sendMail(mailOptions, (error, info) => {

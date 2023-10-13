@@ -4,12 +4,13 @@ function toggleOptions() {
     optionsList.style.display === "none" ? "block" : "none";
 }
 
+let to
 function toggleOption(option) {
   event.stopPropagation();
   option.classList.toggle("selected");
 
 
-  to = Array.from(document.getElementsByClassName("selected")).map(
+   to = Array.from(document.getElementsByClassName("selected")).map(
     (option) => option.nextElementSibling.innerText
   );
   document.querySelector(".custom-selector").innerText = to.join(", ");
@@ -48,31 +49,46 @@ if (optionText.includes(inputValue)) {
   });
 }
 
+   fetch("/select")
+  .then((res) => res.json())
+  .then((dados) => {
+    dados.forEach((user) => {
+console.log(user.name)
+console.log(user.email)
+    });
+  })
+    
 
 
 
-
-
-let to;
 function sendMail() {
+
+  to.forEach((element) => {
+
     const { from, subject, html, date } = document.forms[0].elements;
   const emailInformations = {
     from: from.value,
-    to,
+    element,
     subject: subject.value,
     html: html.value,
     date: date.value
   };
-
+  
   console.log(emailInformations)
-
+  
   fetch("/sendmail", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ emailInformations }),
   });
+    
+  });
+
 
 }
+
+
+
 
 
 async function getUser() {
