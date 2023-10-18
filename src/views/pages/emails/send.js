@@ -43,15 +43,26 @@ let quill = new Quill("#editor", {
   theme: "snow",
 });
 
-let file;
-quill.getModule("toolbar").handlers.image = function () {
+document.querySelector(".ql-image").title = "Inserir Arquivo";
+
+quill.getModule("toolbar").handlers.image = () => {
   let input = document.createElement("input");
   input.type = "file";
-  input.addEventListener("change", function () {
-    file = this.files[0];
+  input.title = "adicionar arquivo ";
+
+  const filePromise = new Promise((resolve) => {
+    input.addEventListener("change", function () {
+      let file = this.files[0];
+      resolve(file);
+    });
   });
   input.click();
-  console.log(quill.root.innerHTML);
+  filePromise.then((file) => {
+    console.log("Arquivo selecionado:", file);
+
+    let fileDiv = document.getElementById("files");
+    fileDiv.innerHTML += `\nArquivo selecionado: ${file.name}\n`;
+  });
 };
 
 function filterOptions() {
@@ -75,8 +86,6 @@ function sendMail() {
       .then((res) => res.json())
       .then((dados) => {
         dados.forEach((user) => {
-            
-         
           if (element === user.email) {
             let client = user.name;
             const emailBody = quill.root.innerHTML.replace("${client}", client);
@@ -87,6 +96,7 @@ function sendMail() {
               subject: subject.value,
               html: emailBody,
               date: date.value,
+              /* attachments: [{ filename: "", path: "" }], */
             };
             fetch("/sendmail", {
               method: "POST",
@@ -96,7 +106,7 @@ function sendMail() {
           }
         });
       });
-    });
+  });
 }
 
 async function getUser() {

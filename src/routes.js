@@ -89,7 +89,7 @@ routes.post("/sendmail", (req, res) => {
     html: emailInformations.html,
   };
 
-/*   if (isNaN(Date.parse(emailInformations.date))) {
+  if (isNaN(Date.parse(emailInformations.date))) {
       smtp.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
@@ -111,14 +111,14 @@ routes.post("/sendmail", (req, res) => {
         }
       });
     });
-  } */
+  }
 });
 
-const mailUser = process.env.MAIL_USER;
 routes.get("/header", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/header.html"));
 });
 
+const mailUser = process.env.MAIL_RECIPIENT;
 routes.get("/mailUser", (req, res) => {
   res.json({ mailUser });
 });
