@@ -75,6 +75,8 @@ function sendMail() {
       .then((res) => res.json())
       .then((dados) => {
         dados.forEach((user) => {
+            
+         
           if (element === user.email) {
             let client = user.name;
             const emailBody = quill.root.innerHTML.replace("${client}", client);
@@ -86,9 +88,6 @@ function sendMail() {
               html: emailBody,
               date: date.value,
             };
-
-            console.log(emailInformations);
-
             fetch("/sendmail", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -97,7 +96,7 @@ function sendMail() {
           }
         });
       });
-  });
+    });
 }
 
 async function getUser() {

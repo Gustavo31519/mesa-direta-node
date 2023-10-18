@@ -19,6 +19,8 @@ const cronDate = require("./services/crom");
 const express = require("express");
 const auth = require("./middlewares/auth");
 
+
+
 routes.get("/select", async (req, res) => {
   try {
     res.json((await db.dbPromise.query(allUser))[0]);
@@ -87,16 +89,16 @@ routes.post("/sendmail", (req, res) => {
     html: emailInformations.html,
   };
 
-  if (isNaN(Date.parse(emailInformations.date))) {
-    smtp.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        res.status(500).send("Erro ao enviar o e-mail.");
-      } else {
-        console.log("E-mail enviado: " + info.response);
-        res.send("E-mail enviado com sucesso!");
-      }
-    });
+/*   if (isNaN(Date.parse(emailInformations.date))) {
+      smtp.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send("Erro ao enviar o e-mail.");
+        } else {
+          console.log("E-mail enviado: " + info.response);
+          res.send("E-mail enviado com sucesso!");
+        }
+      });
   } else {
     cron.schedule(cronDate(emailInformations.date), () => {
       smtp.sendMail(mailOptions, (error, info) => {
@@ -109,7 +111,7 @@ routes.post("/sendmail", (req, res) => {
         }
       });
     });
-  }
+  } */
 });
 
 const mailUser = process.env.MAIL_USER;
