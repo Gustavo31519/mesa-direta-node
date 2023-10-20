@@ -1,0 +1,19 @@
+<textarea type="text" id="input"> </textarea>
+
+<script>
+let input = document.getElementById("input");
+input.addEventListener('keydown', function(event) {
+    if (event.key === "Enter") {
+        let inputValue = input.value.toLowerCase();
+        input.value = inputValue.replace(/\b(\$|\$c|\$cl|\$cli|\$clie|\$clien)\b/g, "banana");
+        ""
+    }
+});
+
+
+</script>
+
+
+
+
+

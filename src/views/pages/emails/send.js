@@ -39,8 +39,27 @@ let quill = new Quill("#editor", {
       ["image"],
     ],
   },
-  placeholder: "Compose an epic...",
-  theme: "snow",
+    placeholder: "Compose an epic...",
+    theme: "snow",
+  
+});
+
+quill.on("text-change", () => {
+  const editor = document.querySelector(".ql-editor");
+  const content = quill.root.innerHTML;
+
+  if (content.includes("$client")) {
+    // Verificar se a substituição é realmente necessária
+    if (
+      !editor.innerHTML.includes('<span style="color: red;">$client</span>')
+    ) {
+      editor.innerHTML = content.replace(
+        /\$client/g,
+        '<span style="color: red;">$client</span> <p>'
+      );
+      editor.title = "Pressione Enter para $client";
+    }
+  }
 });
 
 document.querySelector(".ql-image").title = "Inserir Arquivo";
@@ -48,7 +67,6 @@ document.querySelector(".ql-image").title = "Inserir Arquivo";
 quill.getModule("toolbar").handlers.image = () => {
   let input = document.createElement("input");
   input.type = "file";
-  input.title = "adicionar arquivo ";
 
   const filePromise = new Promise((resolve) => {
     input.addEventListener("change", function () {
@@ -88,7 +106,11 @@ function sendMail() {
         dados.forEach((user) => {
           if (element === user.email) {
             let client = user.name;
-            const emailBody = quill.root.innerHTML.replace("${client}", client);
+            const emailBody = quill.root.innerHTML.replace(
+              `<span style="color: red;">$client</span>`,
+              `<span style="color: black;">${client}</span>`
+            );
+
             const { from, subject, date } = document.forms[0].elements;
             const emailInformations = {
               from: from.value,

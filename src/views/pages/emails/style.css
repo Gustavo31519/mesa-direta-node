@@ -1,101 +1,109 @@
- .custom-selector {
-            border: 1px solid #ccc;
-            cursor: pointer;
-            padding: 5px;
-            width: 200px;
-            position: relative;
-        }
-
-        .options-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1;
-        }
-
-        .option {
-            padding: 5px;
-            cursor: pointer;
-        }
-
-        .option.selected {
-            background-color: #f0f0f0;
-        }
-
-
-
-body {
-    font-family: Arial, sans-serif;
-}
-
-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    margin-top: 8px;
-}
-
-div {
-    margin-bottom: 10px;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-input[type="text"] ,
-
-textarea {
-    width: 90%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-}
-
 .custom-selector {
-    cursor: pointer;
-    padding: 8px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  padding: 5px;
+  width: 200px;
+  position: relative;
 }
 
 .options-list {
-    list-style-type: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1;
 }
 
 .option {
-    padding: 8px;
-    cursor: pointer;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.option.selected {
+  background-color: #f0f0f0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  
+}
+
+form {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  margin-top: 8px;
+}
+
+div {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.custom-selector {
+  cursor: pointer;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.options-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.option {
+  padding: 8px;
+  cursor: pointer;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-size: 16px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .page {
-    display: inline-block; /* Faz o botão ficar em linha com o conteúdo anterior */
-    vertical-align: middle; /* Alinha verticalmente com os elementos ao lado */
-    margin-left: 10px; /* Adiciona um espaço à esquerda do botão (ajuste conforme necessário) */
-
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
 }
 
+.ctn{
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+ /*  gap: 5%; */
+}
+
+.inner {
+ flex: 1;
+}
