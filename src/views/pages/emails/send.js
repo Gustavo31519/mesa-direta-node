@@ -4,6 +4,8 @@ function toggleOptions() {
     optionsList.style.display === "none" ? "block" : "none";
 }
 
+
+
 let to;
 function toggleOption(option) {
   event.stopPropagation();
@@ -13,10 +15,40 @@ function toggleOption(option) {
     (option) => option.nextElementSibling.innerText
   );
   document.querySelector(".custom-selector").innerText = to.join(", ");
+  document.getElementById("preview").innerHTML = "";
+  to.forEach((element) => {
+        
+    document.getElementById("preview").innerHTML += `
+    <div id="dPreview" style="border: 1px solid #000; padding: 10px">
+   <div>
+        <label for="">Preview</label>
+      </div>
+      <div>
+        <label for="">Para</label>
+        <input type="text" id="" disabled value="${element}">
+      </div>
+      <div>
+        <label for="">Assunto</label>
+        <input type="text" value="${subject.value || ""}" disabled>
+      </div>
+      <div><label for="">textarea</label>
+      <textarea cols="30" rows="10" disabled class="tContent"></textarea>
+    </div>
+    <div>
+      <label for="">files</label>
+<span>filename (filesize)</span>
+    </div>
+    </div>`;
+    
+  }
+  
+  );
+
   if (document.querySelector(".custom-selector").innerText === "") {
     document.querySelector(".custom-selector").innerText = "Selecione Opções";
   }
 }
+
 
 document.addEventListener("click", function (event) {
   const optionsList = document.getElementById("optionsList");
@@ -31,6 +63,7 @@ document.addEventListener("click", function (event) {
   }
 });
 
+
 let quill = new Quill("#editor", {
   modules: {
     toolbar: [
@@ -39,17 +72,18 @@ let quill = new Quill("#editor", {
       ["image"],
     ],
   },
-    placeholder: "Compose an epic...",
-    theme: "snow",
-  
+  placeholder: "Compose an epic...",
+  theme: "snow",
+
 });
 
+
+
 quill.on("text-change", () => {
+  let content = quill.root.innerHTML;
   const editor = document.querySelector(".ql-editor");
-  const content = quill.root.innerHTML;
 
   if (content.includes("$client")) {
-    // Verificar se a substituição é realmente necessária
     if (
       !editor.innerHTML.includes('<span style="color: red;">$client</span>')
     ) {
@@ -57,10 +91,8 @@ quill.on("text-change", () => {
         /\$client/g,
         '<span style="color: red;">$client</span> <p>'
       );
-      editor.title = "Pressione Enter para $client";
     }
-  }
-});
+  }})
 
 document.querySelector(".ql-image").title = "Inserir Arquivo";
 
@@ -78,9 +110,16 @@ quill.getModule("toolbar").handlers.image = () => {
   filePromise.then((file) => {
     console.log("Arquivo selecionado:", file);
 
-    let fileDiv = document.getElementById("files");
-    fileDiv.innerHTML += `\nArquivo selecionado: ${file.name}\n`;
+ 
+    let fileP = document.getElementById("files");
+    let line = document.createElement("div")
+    line.innerHTML += `Arquivo selecionado: ${file.name} <span class="close">&times;</span> <br>`;
+    fileP.appendChild(line);
+
+    line.querySelector(".close").addEventListener("click", () => {
+      fileP.removeChild(line);
   });
+})
 };
 
 function filterOptions() {
@@ -98,6 +137,15 @@ function filterOptions() {
   });
 }
 
+
+let {subject} = document.forms[0].elements
+subject.oninput = () => {
+  const [,,pSub] = document.getElementById("dPreview").children;
+  console.log(pSub)
+  pSub.children[1].value = subject.value
+}
+
+
 function sendMail() {
   to.forEach((element) => {
     fetch("/select")
@@ -111,7 +159,7 @@ function sendMail() {
               `<span style="color: black;">${client}</span>`
             );
 
-            const { from, subject, date } = document.forms[0].elements;
+            const { from, date } = document.forms[0].elements;
             const emailInformations = {
               from: from.value,
               element,

@@ -160,7 +160,7 @@ routes.use(
 );
 routes.use(
   "/emails",
-  auth,
+  /* auth, */
   express.static(path.join(__dirname, "views/pages/emails"))
 );
 routes.use("/login", express.static(path.join(__dirname, "views/pages/login")));
