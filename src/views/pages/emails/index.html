@@ -3,7 +3,6 @@
   <title>Seletor de Opções Personalizado</title>
 </head>
 <link rel="stylesheet" href="./style.css" />
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <body>
 
@@ -46,10 +45,12 @@
             <input type="text" id="subject" />
           </div>
           
-          <p>$client - nome client <br> &lt;br&gt; - quebra de linha </p>
+          
+          <div id="textarea" >
+            <label for="">Conteudo</label>
+            <p>$client - nome client <br> &lt;br&gt; - quebra de linha <br> </p>
+          <textarea class="textarea" id="" cols="30" rows="10"></textarea>
 
-<div id="textarea" >
-          <div id="editor"></div>
         </div>
         
         <div>
@@ -71,8 +72,6 @@
   </div>
   
   
-  
-      <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
       <script src="./send.js"></script>
       
     </body>

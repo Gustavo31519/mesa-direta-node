@@ -4,8 +4,6 @@ function toggleOptions() {
     optionsList.style.display === "none" ? "block" : "none";
 }
 
-
-
 let to;
 function toggleOption(option) {
   event.stopPropagation();
@@ -19,7 +17,7 @@ function toggleOption(option) {
   to.forEach((element) => {
         
     document.getElementById("preview").innerHTML += `
-    <div id="dPreview" style="border: 1px solid #000; padding: 10px">
+    <div class="preview" id="dPreview" style="border: 1px solid #000; padding: 10px">
    <div>
         <label for="">Preview</label>
       </div>
@@ -32,7 +30,9 @@ function toggleOption(option) {
         <input type="text" value="${subject.value || ""}" disabled>
       </div>
       <div><label for="">textarea</label>
-      <textarea cols="30" rows="10" disabled class="tContent"></textarea>
+      <div style="border: 1px solid #000; padding:2px" disabled class="tContent">${
+        document.querySelector(".textarea").value || ""
+      }</div>
     </div>
     <div>
       <label for="">files</label>
@@ -64,40 +64,32 @@ document.addEventListener("click", function (event) {
 });
 
 
-let quill = new Quill("#editor", {
-  modules: {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline"],
-      ["image"],
-    ],
-  },
-  placeholder: "Compose an epic...",
-  theme: "snow",
+let text = document.querySelector(".textarea")
+text.oninput = () => {
+  const [,,, ptext] = document.getElementById("dPreview").children;
+  ptext.children[1].innerHTML = `${text.value}`
 
+
+document.querySelectorAll(".preview").forEach((element) => {
+  let email = element.children[1].children[1].value
+
+   fetch("/select")
+      .then((res) => res.json())
+      .then((dados) => {
+         dados.forEach((user) => {
+          if(email === user.email) {
+            if(text.value.includes("$client")) {
+              text.value.replace("$client", user.name)
+            }
+          }
+         })
+      })
 });
 
+}
 
 
-quill.on("text-change", () => {
-  let content = quill.root.innerHTML;
-  const editor = document.querySelector(".ql-editor");
-
-  if (content.includes("$client")) {
-    if (
-      !editor.innerHTML.includes('<span style="color: red;">$client</span>')
-    ) {
-      editor.innerHTML = content.replace(
-        /\$client/g,
-        '<span style="color: red;">$client</span> <p>'
-      );
-    }
-  }})
-
-document.querySelector(".ql-image").title = "Inserir Arquivo";
-
-quill.getModule("toolbar").handlers.image = () => {
-  let input = document.createElement("input");
+  /* let input = document.createElement("input");
   input.type = "file";
 
   const filePromise = new Promise((resolve) => {
@@ -119,8 +111,8 @@ quill.getModule("toolbar").handlers.image = () => {
     line.querySelector(".close").addEventListener("click", () => {
       fileP.removeChild(line);
   });
-})
-};
+}) */
+
 
 function filterOptions() {
   const inputValue = document.getElementById("search").value.toLowerCase();
@@ -154,7 +146,7 @@ function sendMail() {
         dados.forEach((user) => {
           if (element === user.email) {
             let client = user.name;
-            const emailBody = quill.root.innerHTML.replace(
+            const emailBody = x.replace(
               `<span style="color: red;">$client</span>`,
               `<span style="color: black;">${client}</span>`
             );
