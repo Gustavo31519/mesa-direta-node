@@ -62,7 +62,7 @@ textarea {
   cursor: pointer;
 }
 
-button {
+button, .files-up {
   padding: 10px 20px;
   background-color: #007bff;
   border: none;
@@ -71,7 +71,7 @@ button {
   font-size: 16px;
 }
 
-button:hover {
+button:hover, .files-up:hover {
   background-color: #0056b3;
 }
 
@@ -86,7 +86,6 @@ button:hover {
   justify-content: center;
   height: 100vh;
   margin: 0;
- /*  gap: 5%; */
 }
 
 .inner {
@@ -100,3 +99,12 @@ button:hover {
     font-weight: bold;
 }
 
+.close:hover {
+       color: black;
+      text-decoration: none;
+      cursor: pointer;
+}
+
+.files-in {
+    display: none;
+}

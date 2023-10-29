@@ -32,6 +32,7 @@
         <ul class="options-list" id="optionsList" style="display: none">
           <li>
               <input
+              placeholder="Filtrar"
               type="text"
               id="search"
               oninput="filterOptions()"
@@ -48,13 +49,14 @@
           
           <div id="textarea" >
             <label for="">Conteudo</label>
-            <p>$client - nome client <br> &lt;br&gt; - quebra de linha <br> </p>
+            <p>$client - nome cliente</p>
           <textarea class="textarea" id="" cols="30" rows="10"></textarea>
-
         </div>
         
         <div>
-          <p id="files"></p>
+          <label for="files" class="files-up">Carregar arquivo</label>
+          <input class="files-in" id="files" type="file">
+          <p id="fileList"></p>
         </div>
         
         <div>

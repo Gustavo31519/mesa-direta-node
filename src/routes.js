@@ -94,9 +94,11 @@ routes.post("/sendmail", (req, res) => {
         if (error) {
           console.log(error);
           res.status(500).send("Erro ao enviar o e-mail.");
+           res.json({ sended: false });
         } else {
           console.log("E-mail enviado: " + info.response);
           res.send("E-mail enviado com sucesso!");
+           res.json({ sended: true });
         }
       });
   } else {
@@ -105,9 +107,11 @@ routes.post("/sendmail", (req, res) => {
         if (error) {
           console.log(error);
           res.status(500).send("Erro ao enviar o e-mail.");
+           res.json({ enviado: false });
         } else {
           console.log("E-mail enviado: " + info.response);
           res.send("E-mail enviado com sucesso!");
+           res.json({ enviado: true });
         }
       });
     });

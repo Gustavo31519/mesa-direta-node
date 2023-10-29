@@ -6,6 +6,7 @@ function toggleOptions() {
 
 let to;
 function toggleOption(option) {
+   document.getElementById("fileList").innerHTML = "";
   event.stopPropagation();
   option.classList.toggle("selected");
 
@@ -14,41 +15,38 @@ function toggleOption(option) {
   );
   document.querySelector(".custom-selector").innerText = to.join(", ");
   document.getElementById("preview").innerHTML = "";
+
   to.forEach((element) => {
-        
     document.getElementById("preview").innerHTML += `
-    <div class="preview" id="dPreview" style="border: 1px solid #000; padding: 10px">
-   <div>
-        <label for="">Preview</label>
+      <div class="preview" id="dPreview" style="border: 1px groove #000; padding: 10px; width: 90%">
+     <div>
+          <label for="">Preview</label>
+        </div>
+        <div>
+          <label for="">Para</label>
+          <input type="text" id="" disabled value="${element}">
+        </div>
+        <div>
+          <label for="">Assunto</label>
+          <input type="text" value="${subject.value || ""}" disabled>
+        </div>
+        <div><label for="">Conteudo</label>
+        <div style="word-wrap: break-word; border-style: groove; width: 90%; max-width: 600px;" disabled><p>${
+          document.querySelector(".textarea").value
+        }</p></div>
       </div>
       <div>
-        <label for="">Para</label>
-        <input type="text" id="" disabled value="${element}">
-      </div>
-      <div>
-        <label for="">Assunto</label>
-        <input type="text" value="${subject.value || ""}" disabled>
-      </div>
-      <div><label for="">textarea</label>
-      <div style="border: 1px solid #000; padding:2px" disabled class="tContent">${
-        document.querySelector(".textarea").value || ""
-      }</div>
-    </div>
-    <div>
-      <label for="">files</label>
-<span>filename (filesize)</span>
-    </div>
-    </div>`;
-    
-  }
-  
-  );
+        <label for="">Arquivos</label>
+  <span>
+  </span>
+      </div>  
+      </div>`;
+  });
 
   if (document.querySelector(".custom-selector").innerText === "") {
     document.querySelector(".custom-selector").innerText = "Selecione Opções";
   }
 }
-
 
 document.addEventListener("click", function (event) {
   const optionsList = document.getElementById("optionsList");
@@ -63,55 +61,62 @@ document.addEventListener("click", function (event) {
   }
 });
 
+//preview
+let text = document.querySelector(".textarea");
+let subject = document.forms[0].elements[2];
+text.oninput = subject.oninput = () => {
+  document.querySelectorAll(".preview").forEach((element) => {
+    let email = element.children[1].children[1].value;
 
-let text = document.querySelector(".textarea")
-text.oninput = () => {
-  const [,,, ptext] = document.getElementById("dPreview").children;
-  ptext.children[1].innerHTML = `${text.value}`
-
-
-document.querySelectorAll(".preview").forEach((element) => {
-  let email = element.children[1].children[1].value
-
-   fetch("/select")
+    fetch("/select")
       .then((res) => res.json())
       .then((dados) => {
-         dados.forEach((user) => {
-          if(email === user.email) {
-            if(text.value.includes("$client")) {
-              text.value.replace("$client", user.name)
-            }
+        dados.forEach((user) => {
+          if (email === user.email) {
+            element.children[2].children[1].value = subject.value.replace(
+              "$client",
+              user.name
+            );
+            element.children[3].children[1].children[0].innerHTML = text.value
+              .replace("$client", user.name)
+              .replace(/\n/g, "<br>");
           }
-         })
-      })
-});
+        });
+      });
+    element.children[3].children[1].children[0].innerHTML = text.value.replace(
+      /\n/g,
+      "<br>"
+    );
+    element.children[2].children[1].value = subject.value;
+  });
+};
 
-}
+//files
+/* let formData = new FormData() */
+//
 
-
-  /* let input = document.createElement("input");
-  input.type = "file";
-
-  const filePromise = new Promise((resolve) => {
-    input.addEventListener("change", function () {
-      let file = this.files[0];
-      resolve(file);
+document.getElementById("files").addEventListener("change", () => {
+  let file = document.getElementById("files").files[0];
+ /*  formData.append("file", file) */
+  document.getElementById(
+    "fileList"
+  ).innerHTML += ` Arquivo selecionado: ${file.name} <span class="close">&times<span><br>`;
+  document.querySelectorAll(".preview").forEach((element) => {
+    element.children[4].children[1].innerHTML += `${file.name}(${file.size}kb) <br>`;
+  });
+  document.querySelectorAll(".close").forEach((element) => {
+    element.addEventListener("click", () => {
+      document.getElementById("fileList").innerHTML = "";
+      /* formData.length = 0 */
+      document.querySelectorAll(".preview").forEach((element) => {
+        element.children[4].children[1].innerHTML = "";
+      });
     });
   });
-  input.click();
-  filePromise.then((file) => {
-    console.log("Arquivo selecionado:", file);
+});
+//
 
- 
-    let fileP = document.getElementById("files");
-    let line = document.createElement("div")
-    line.innerHTML += `Arquivo selecionado: ${file.name} <span class="close">&times;</span> <br>`;
-    fileP.appendChild(line);
 
-    line.querySelector(".close").addEventListener("click", () => {
-      fileP.removeChild(line);
-  });
-}) */
 
 
 function filterOptions() {
@@ -129,46 +134,40 @@ function filterOptions() {
   });
 }
 
-
-let {subject} = document.forms[0].elements
-subject.oninput = () => {
-  const [,,pSub] = document.getElementById("dPreview").children;
-  console.log(pSub)
-  pSub.children[1].value = subject.value
-}
-
-
-function sendMail() {
+async function sendMail() {
   to.forEach((element) => {
     fetch("/select")
       .then((res) => res.json())
       .then((dados) => {
         dados.forEach((user) => {
           if (element === user.email) {
-            let client = user.name;
-            const emailBody = x.replace(
-              `<span style="color: red;">$client</span>`,
-              `<span style="color: black;">${client}</span>`
-            );
+            const emailBody = text.value
+              .replace("$client", user.name)
+              .replace(/\n/g, "<br>");
 
             const { from, date } = document.forms[0].elements;
             const emailInformations = {
               from: from.value,
               element,
-              subject: subject.value,
+              subject: subject.value.replace("$client",user.name),
               html: emailBody,
               date: date.value,
-              /* attachments: [{ filename: "", path: "" }], */
             };
             fetch("/sendmail", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ emailInformations }),
+              body: JSON.stringify({ emailInformations }), /* formData, */
             });
           }
         });
       });
   });
+  const data = await response.json()
+    if (data.sended) {
+        alert('Email enviado com sucesso!');
+      } else {
+        alert('Houve um erro ao enviar o email.');
+      }
 }
 
 async function getUser() {
