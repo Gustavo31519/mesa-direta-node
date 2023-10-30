@@ -5,8 +5,8 @@ function toggleOptions() {
 }
 
 let to;
+let filepreview;
 function toggleOption(option) {
-   document.getElementById("fileList").innerHTML = "";
   event.stopPropagation();
   option.classList.toggle("selected");
 
@@ -38,6 +38,7 @@ function toggleOption(option) {
       <div>
         <label for="">Arquivos</label>
   <span>
+   ${filepreview !== undefined ? filepreview : ""}
   </span>
       </div>  
       </div>`;
@@ -92,22 +93,24 @@ text.oninput = subject.oninput = () => {
 };
 
 //files
-/* let formData = new FormData() */
+let formData = new FormData();
 //
 
 document.getElementById("files").addEventListener("change", () => {
   let file = document.getElementById("files").files[0];
- /*  formData.append("file", file) */
+  formData.append("file", file);
   document.getElementById(
     "fileList"
   ).innerHTML += ` Arquivo selecionado: ${file.name} <span class="close">&times<span><br>`;
   document.querySelectorAll(".preview").forEach((element) => {
-    element.children[4].children[1].innerHTML += `${file.name}(${file.size}kb) <br>`;
+    filepreview =
+      element.children[4].children[1].innerHTML += `${file.name}(${file.size}kb) <br>`;
   });
   document.querySelectorAll(".close").forEach((element) => {
     element.addEventListener("click", () => {
       document.getElementById("fileList").innerHTML = "";
-      /* formData.length = 0 */
+      formData = new FormData()
+      filepreview = "";
       document.querySelectorAll(".preview").forEach((element) => {
         element.children[4].children[1].innerHTML = "";
       });
@@ -115,9 +118,6 @@ document.getElementById("files").addEventListener("change", () => {
   });
 });
 //
-
-
-
 
 function filterOptions() {
   const inputValue = document.getElementById("search").value.toLowerCase();
@@ -135,6 +135,7 @@ function filterOptions() {
 }
 
 async function sendMail() {
+  event.preventDefault();
   to.forEach((element) => {
     fetch("/select")
       .then((res) => res.json())
@@ -149,27 +150,41 @@ async function sendMail() {
             const emailInformations = {
               from: from.value,
               element,
-              subject: subject.value.replace("$client",user.name),
+              subject: subject.value.replace("$client", user.name),
               html: emailBody,
               date: date.value,
             };
+            fetch("/upload", {
+              method: "POST",
+              body: formData,
+            }).then((response) => response.json())
+            .then((data) => {
+              if(data.uploaded) {
             fetch("/sendmail", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ emailInformations }), /* formData, */
-            });
+              body: JSON.stringify({ emailInformations }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.sended) {
+                  alert("Email enviado com sucesso!");
+                } else {
+                  alert("Houve um erro ao enviar o email.");
+                }
+              })
+              .catch((error) => {
+                console.error("Erro na solicitaçao", error);
+              });
+              } else {
+                alert("Erro ao enviar o arquivo")
+              }
+            })
           }
         });
       });
   });
-  const data = await response.json()
-    if (data.sended) {
-        alert('Email enviado com sucesso!');
-      } else {
-        alert('Houve um erro ao enviar o email.');
-      }
 }
-
 async function getUser() {
   let ul = document.querySelector("ul");
   await fetch("/select")

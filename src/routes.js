@@ -19,8 +19,6 @@ const cronDate = require("./services/crom");
 const express = require("express");
 const auth = require("./middlewares/auth");
 
-
-
 routes.get("/select", async (req, res) => {
   try {
     res.json((await db.dbPromise.query(allUser))[0]);
@@ -80,41 +78,74 @@ routes.post("/delete", async (req, res) => {
 
 routes.post("/sendmail", (req, res) => {
   const emailInformations = req.body.emailInformations;
-  console.log(emailInformations);
+
 
   let mailOptions = {
     from: emailInformations.from,
     to: emailInformations.element,
     subject: emailInformations.subject,
     html: emailInformations.html,
+    attachments: global.files,
   };
-
+  console.log(mailOptions);
   if (isNaN(Date.parse(emailInformations.date))) {
-      smtp.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          res.status(500).send("Erro ao enviar o e-mail.");
-           res.json({ sended: false });
-        } else {
-          console.log("E-mail enviado: " + info.response);
-          res.send("E-mail enviado com sucesso!");
-           res.json({ sended: true });
-        }
-      });
+    smtp.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        res.json({ sended: false });
+         unlink(global.files);
+      } else {
+        console.log("E-mail enviado: " + info.response);
+        res.json({ sended: true });
+         unlink(global.files);
+      }
+    });
+    
   } else {
     cron.schedule(cronDate(emailInformations.date), () => {
       smtp.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.status(500).send("Erro ao enviar o e-mail.");
-           res.json({ enviado: false });
+          res.json({ sended: false });
+          unlink(global.files)
         } else {
           console.log("E-mail enviado: " + info.response);
-          res.send("E-mail enviado com sucesso!");
-           res.json({ enviado: true });
+          res.json({ sended: true });
+          unlink(global.files)
         }
       });
     });
+  }
+    function unlink(files) {
+      files.forEach((element) => {
+        fs.unlink(element.path, (err) => {
+          if (err) {
+            console.error("Erro ao excluir:", err);
+            return;
+          }
+          console.log("Arquivo excluido");
+        });
+      });
+    } 
+});
+
+global.files = [];
+routes.post("/upload", upload.array("file"), async (req, res) => {
+  try {
+    global.files = [];
+    const files = req.files;
+    console.log(files);
+    files.forEach((file) => {
+      global.files.push({
+        filename: file.originalname,
+        path: file.path,
+      });
+    });
+    console.log(global.files);
+    res.json({ uploaded: true });
+  } catch (error) {
+    console.error("Erro interno do servidor:", error);
+    res.json({ uploaded: false });
   }
 });
 
