@@ -14,11 +14,11 @@
     <div class="container">
         <div class="header">
             <span>Cadastro de email</span>
-            <div>
-               
-                <label class="filelabel" for="upload">Importar</label>
+            <div class="button-content">
+                <label class="filelabel" for="upload">Importar xlsx</label>
                 <input onchange="upload()" accept=".xlsx" class="file" type="file" id="upload" class="adcionar"></input>
-                <button id="abrirModal" class="adcionar">Adicionar</label>
+                <button id="abrirModal" class="adcionar">Adicionar usuario</label>
+                <button id="abrirModal2"class="adcionar">Adcionar Grupo</button>
             </div>
         </div>
 
@@ -54,6 +54,25 @@
                     <input type="email" id="upEmail" placeholder="Insira seu email"> 
                 </div>
                 <button type="submit" class="atualizar">Atualizar</button>
+            </form>   
+        </div>
+    </div>
+        <div id="meuModal3" class="modal3">
+        <div class='modal-content'>
+            <form class="form" id="upForm" onsubmit="">
+                <span class="fechar3">&times;</span>
+                <div class="campo">
+                    <label for="m-nome">Nome</label> 
+                    <input type="text" id="" name="name" placeholder="Insira seu nome"> 
+                </div>
+                <div id="groupDiv" class="campo">
+                    <label for="m-email">Email </label>
+                    <div>
+                        <span class="removeInput" style="display: none"> &times; </span>
+                        <input type="email" class="groupEmail" placeholder="Insira seu email"> 
+                    </div>
+                </div>
+                <button type="submit" class="atualizar">Inserir grupo</button>
             </form>   
         </div>
     </div>

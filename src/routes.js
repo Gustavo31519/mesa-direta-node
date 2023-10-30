@@ -6,6 +6,7 @@ const {
   updateUser,
   deleteUser,
   insertXlsxUser,
+  groupSelect
 } = require("./helpers/handleMysql");
 const routes = Router();
 const smtp = require("./services/smtp");
@@ -26,6 +27,7 @@ routes.get("/select", async (req, res) => {
     res.status(500).json({ message: "Erro interno do servidor" });
   }
 });
+
 
 routes.post("/receber", async (req, res) => {
   const clientInformations = req.body.clientInformations;
@@ -190,7 +192,7 @@ routes.post("/auth", auth, async (req, res) => {
 
 routes.use(
   "/start",
-  auth,
+  /* auth, */
   express.static(path.join(__dirname, "views/pages/start"))
 );
 routes.use(

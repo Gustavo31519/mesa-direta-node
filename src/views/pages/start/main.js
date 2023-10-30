@@ -51,6 +51,18 @@ window.addEventListener("click", (event) => {
   }
 });
 
+document.getElementById("abrirModal2").addEventListener("click", () => {
+  document.getElementById("meuModal3").style.display = "block";
+});
+document.querySelector(".fechar3").addEventListener("click", () => {
+  document.getElementById("meuModal3").style.display = "none";
+});
+window.addEventListener("click", (event) => {
+  if (event.target == document.getElementById("meuModal3")) {
+    document.getElementById("meuModal3").style.display = "none";
+  }
+});
+
 let lastEmail;
 let lastName;
 
@@ -126,6 +138,29 @@ async function deleter(button) {
   }
 }
 
+let groupDiv = document.getElementById("groupDiv");
+groupDiv.addEventListener("input", (event) => {
+  const lastInput = groupDiv.lastElementChild.lastElementChild;
+  if (event.target === lastInput && event.target.value !== "") {
+    const inputContainer = document.createElement("div");
+    inputContainer.classList.add("inputContainer");
+    const newInput = document.createElement("input");
+    newInput.type = "text";
+    newInput.classList.add("groupInput");
+    newInput.placeholder = "Insira seu email";
+    const removeButton = document.createElement("span");
+    removeButton.classList.add("removeInput");
+    removeButton.innerHTML = " &times; ";
+    inputContainer.appendChild(removeButton);
+    inputContainer.appendChild(newInput);
+    groupDiv.appendChild(inputContainer);
+  }
+});
+groupDiv.addEventListener("click", (event) => {
+  if (event.target.classList.contains("removeInput")) {
+    event.target.parentElement.remove();
+  }
+});
 fetch("/header")
   .then((response) => response.text())
   .then((data) => (document.getElementById("header").innerHTML = data));
