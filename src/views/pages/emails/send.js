@@ -198,6 +198,7 @@ async function getUser() {
       `;
       });
     })
+  await fetch("/group")
     .catch((error) => console.log(error));
 }
 getUser();
