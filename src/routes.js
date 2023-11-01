@@ -6,7 +6,8 @@ const {
   updateUser,
   deleteUser,
   insertXlsxUser,
-  groupSelect
+  insertGroupName,
+  groupSelect,
 } = require("./helpers/handleMysql");
 const routes = Router();
 const smtp = require("./services/smtp");
@@ -27,6 +28,13 @@ routes.get("/select", async (req, res) => {
     res.status(500).json({ message: "Erro interno do servidor" });
   }
 });
+routes.get("/groupSelect", async (req,res) => {
+  try {
+    res.json((await db.dbPromise.query(groupSelect, ["ca"]))[0])
+  } catch (e) {
+    res.status(500).json({message: "Erro interno do servidor"})
+  }
+})
 
 
 routes.post("/receber", async (req, res) => {
@@ -38,6 +46,7 @@ routes.post("/receber", async (req, res) => {
       clientInformations[0],
       clientInformations[1],
       clientInformations[2],
+      clientInformations[3]
     ]);
   } catch (e) {
     console.error("Erro interno do servidor:", e);

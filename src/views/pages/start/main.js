@@ -10,11 +10,19 @@ async function getUser() {
                       <td>${user.email}</td>
                       <td><button id="abrirModal2" class="atualizar" onclick='modal2(this)' */>Editar</>
                       <td><button onclick=deleter(this) class="excluir">Excluir</>
+                      <td>${user.group_id !== null ? user.group_id : "Sem grupo"}</td>
                       </tr>
                   `;
       });
     })
     .catch((error) => console.log(error));
+/*   await fetch("/groupSelect")
+    .then((res) => res.json())
+    .then((dados) => {
+      dados.forEach((user) => {
+        tbody.innerHTML += 
+      });
+    }); */
 }
 getUser();
 
@@ -25,6 +33,7 @@ async function postUser(event) {
     document.getElementById("name").value,
     document.getElementById("email").value,
     new Date().toISOString().slice(0, 19).replace("T", " "),
+    document.getElementById("group").value
   ];
 
   fetch("/receber", {
@@ -51,7 +60,7 @@ window.addEventListener("click", (event) => {
   }
 });
 
-document.getElementById("abrirModal2").addEventListener("click", () => {
+/* document.getElementById("abrirModal2").addEventListener("click", () => {
   document.getElementById("meuModal3").style.display = "block";
 });
 document.querySelector(".fechar3").addEventListener("click", () => {
@@ -61,7 +70,7 @@ window.addEventListener("click", (event) => {
   if (event.target == document.getElementById("meuModal3")) {
     document.getElementById("meuModal3").style.display = "none";
   }
-});
+}); */
 
 let lastEmail;
 let lastName;
@@ -138,7 +147,7 @@ async function deleter(button) {
   }
 }
 
-let groupDiv = document.getElementById("groupDiv");
+/* let groupDiv = document.getElementById("groupDiv");
 groupDiv.addEventListener("input", (event) => {
   const lastInput = groupDiv.lastElementChild.lastElementChild;
   if (event.target === lastInput && event.target.value !== "") {
@@ -160,7 +169,7 @@ groupDiv.addEventListener("click", (event) => {
   if (event.target.classList.contains("removeInput")) {
     event.target.parentElement.remove();
   }
-});
+}); */
 fetch("/header")
   .then((response) => response.text())
   .then((data) => (document.getElementById("header").innerHTML = data));
@@ -190,3 +199,33 @@ function upload() {
   }
   console.log(importation);
 }
+
+
+/* 
+function emailSelector() {
+  let groupEmail = [document.forms[2][0].value];
+  let emails = document.querySelectorAll(".groupInput");
+  emails.forEach((element) => {
+    groupEmail.push(element.value);
+  });
+  let groupEmails = JSON.stringify(groupEmail.filter((s) => s !== ""))
+  console.log(groupEmails)
+
+  fetch("/group", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: groupEmails,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.sended) {
+        alert("Grupo acidionado com sucesso");
+      } else {
+        alert("Houve um erro ao adicionar o grpo");
+      }
+    })
+    .catch((error) => {
+      console.error("Erro na solicitação", error);
+    });
+}
+ */

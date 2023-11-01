@@ -18,7 +18,7 @@
                 <label class="filelabel" for="upload">Importar xlsx</label>
                 <input onchange="upload()" accept=".xlsx" class="file" type="file" id="upload" class="adcionar"></input>
                 <button id="abrirModal" class="adcionar">Adicionar usuario</label>
-                <button id="abrirModal2"class="adcionar">Adcionar Grupo</button>
+               <!--  <button id="abrirModal2"class="adcionar">Adcionar Grupo</button> -->
             </div>
         </div>
 
@@ -35,6 +35,10 @@
                 <div class="campo">
                     <label for="m-email">Email </label>
                     <input type="email" id="email" placeholder="Insira seu email" required> 
+                </div>
+                <div class="campo">
+                    <label for="">Grupo</label>
+                    <input type="text" id="group" placeholder="Insira nome do grupo">
                 </div>
                 <button type="submit" class="adcionar">Adicionar</button>
             </form>   
@@ -57,25 +61,25 @@
             </form>   
         </div>
     </div>
-        <div id="meuModal3" class="modal3">
+<!--         <div id="meuModal3" class="modal3">
         <div class='modal-content'>
-            <form class="form" id="upForm" onsubmit="">
+            <form class="form" id="gForm" onsubmit="emailSelector()">
                 <span class="fechar3">&times;</span>
                 <div class="campo">
-                    <label for="m-nome">Nome</label> 
+                    <label for="m-nome">Nome do grupo</label> 
                     <input type="text" id="" name="name" placeholder="Insira seu nome"> 
                 </div>
                 <div id="groupDiv" class="campo">
                     <label for="m-email">Email </label>
                     <div>
                         <span class="removeInput" style="display: none"> &times; </span>
-                        <input type="email" class="groupEmail" placeholder="Insira seu email"> 
+                        <input type="email" class="groupInput" placeholder="Insira seu email"> 
                     </div>
                 </div>
                 <button type="submit" class="atualizar">Inserir grupo</button>
             </form>   
         </div>
-    </div>
+    </div> -->
     
     
 
@@ -88,6 +92,7 @@
              <th>Email</th>
              <th>Editar</th>
              <th>Excluir</th>
+             <th>Grupo</th>
              </tr>
         </thead>
         <tbody id="tbody">
