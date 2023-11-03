@@ -4,7 +4,7 @@ function toggleOptions() {
     optionsList.style.display === "none" ? "block" : "none";
 }
 
-let to
+let to = []
 let filepreview;
 let groupEmail
  async function toggleOption(option) {
@@ -21,6 +21,7 @@ let groupEmail
          .filter((user) => user.group_id === option.innerText)
          .map((user) => user.email);
 
+
         return userEmail
       })
   );
@@ -28,8 +29,10 @@ let groupEmail
   try {
     let emails = await Promise.all(promises)
     to = await emails.filter((email) => email !== undefined);
-    to.push(...groupEmail)
-    console.log(to)
+
+ /*    if(groupEmail !== undefined ) {
+      to = groupEmail
+    } */
 
     if (to.length > 0) {
       document.querySelector(".custom-selector").innerText = to.join(", ");

@@ -18,7 +18,6 @@
                 <label class="filelabel" for="upload">Importar xlsx</label>
                 <input onchange="upload()" accept=".xlsx" class="file" type="file" id="upload" class="adcionar"></input>
                 <button id="abrirModal" class="adcionar">Adicionar usuario</label>
-               <!--  <button id="abrirModal2"class="adcionar">Adcionar Grupo</button> -->
             </div>
         </div>
 
@@ -61,25 +60,6 @@
             </form>   
         </div>
     </div>
-<!--         <div id="meuModal3" class="modal3">
-        <div class='modal-content'>
-            <form class="form" id="gForm" onsubmit="emailSelector()">
-                <span class="fechar3">&times;</span>
-                <div class="campo">
-                    <label for="m-nome">Nome do grupo</label> 
-                    <input type="text" id="" name="name" placeholder="Insira seu nome"> 
-                </div>
-                <div id="groupDiv" class="campo">
-                    <label for="m-email">Email </label>
-                    <div>
-                        <span class="removeInput" style="display: none"> &times; </span>
-                        <input type="email" class="groupInput" placeholder="Insira seu email"> 
-                    </div>
-                </div>
-                <button type="submit" class="atualizar">Inserir grupo</button>
-            </form>   
-        </div>
-    </div> -->
     
     
 
@@ -98,6 +78,20 @@
         <tbody id="tbody">
         </tbody>
     </table>
+    </div>
+
+    <div class="container">
+            <div class="divTable">
+        <table id="grouTable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <th>Grupos</th>
+                    <th>Emails</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
     </div>
     
     <script src="./main.js"></script>

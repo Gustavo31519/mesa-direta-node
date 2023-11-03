@@ -1,5 +1,7 @@
 async function getUser() {
   tbody.innerHTML = "";
+  let groupTable = document.getElementById("grouTable");
+  let userGroups = {};
   await fetch("/select")
     .then((res) => res.json())
     .then((dados) => {
@@ -10,19 +12,24 @@ async function getUser() {
                       <td>${user.email}</td>
                       <td><button id="abrirModal2" class="atualizar" onclick='modal2(this)' */>Editar</>
                       <td><button onclick=deleter(this) class="excluir">Excluir</>
-                      <td>${user.group_id !== null ? user.group_id : "Sem grupo"}</td>
+                      <td>${
+                        user.group_id !== null ? user.group_id : "Sem grupo"
+                      }</td>
                       </tr>
                   `;
+        if (user.group_id !== null) {
+          if (!userGroups[user.group_id]) {
+            userGroups[user.group_id] = [];
+          }
+          userGroups[user.group_id].push(user.email);
+        }
       });
     })
     .catch((error) => console.log(error));
-/*   await fetch("/groupSelect")
-    .then((res) => res.json())
-    .then((dados) => {
-      dados.forEach((user) => {
-        tbody.innerHTML += 
-      });
-    }); */
+  for (let groupId in userGroups) {
+    let emails = userGroups[groupId].join(", ");
+    groupTable.innerHTML += `<tr><td>${groupId}</td><td>${emails}</td></tr>`;
+  }
 }
 getUser();
 
@@ -33,7 +40,7 @@ async function postUser(event) {
     document.getElementById("name").value,
     document.getElementById("email").value,
     new Date().toISOString().slice(0, 19).replace("T", " "),
-    document.getElementById("group").value
+    document.getElementById("group").value,
   ];
 
   fetch("/receber", {
@@ -59,18 +66,6 @@ window.addEventListener("click", (event) => {
     document.getElementById("meuModal").style.display = "none";
   }
 });
-
-/* document.getElementById("abrirModal2").addEventListener("click", () => {
-  document.getElementById("meuModal3").style.display = "block";
-});
-document.querySelector(".fechar3").addEventListener("click", () => {
-  document.getElementById("meuModal3").style.display = "none";
-});
-window.addEventListener("click", (event) => {
-  if (event.target == document.getElementById("meuModal3")) {
-    document.getElementById("meuModal3").style.display = "none";
-  }
-}); */
 
 let lastEmail;
 let lastName;
@@ -147,29 +142,6 @@ async function deleter(button) {
   }
 }
 
-/* let groupDiv = document.getElementById("groupDiv");
-groupDiv.addEventListener("input", (event) => {
-  const lastInput = groupDiv.lastElementChild.lastElementChild;
-  if (event.target === lastInput && event.target.value !== "") {
-    const inputContainer = document.createElement("div");
-    inputContainer.classList.add("inputContainer");
-    const newInput = document.createElement("input");
-    newInput.type = "text";
-    newInput.classList.add("groupInput");
-    newInput.placeholder = "Insira seu email";
-    const removeButton = document.createElement("span");
-    removeButton.classList.add("removeInput");
-    removeButton.innerHTML = " &times; ";
-    inputContainer.appendChild(removeButton);
-    inputContainer.appendChild(newInput);
-    groupDiv.appendChild(inputContainer);
-  }
-});
-groupDiv.addEventListener("click", (event) => {
-  if (event.target.classList.contains("removeInput")) {
-    event.target.parentElement.remove();
-  }
-}); */
 fetch("/header")
   .then((response) => response.text())
   .then((data) => (document.getElementById("header").innerHTML = data));
@@ -199,33 +171,3 @@ function upload() {
   }
   console.log(importation);
 }
-
-
-/* 
-function emailSelector() {
-  let groupEmail = [document.forms[2][0].value];
-  let emails = document.querySelectorAll(".groupInput");
-  emails.forEach((element) => {
-    groupEmail.push(element.value);
-  });
-  let groupEmails = JSON.stringify(groupEmail.filter((s) => s !== ""))
-  console.log(groupEmails)
-
-  fetch("/group", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: groupEmails,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.sended) {
-        alert("Grupo acidionado com sucesso");
-      } else {
-        alert("Houve um erro ao adicionar o grpo");
-      }
-    })
-    .catch((error) => {
-      console.error("Erro na solicitação", error);
-    });
-}
- */
