@@ -4,48 +4,75 @@ function toggleOptions() {
     optionsList.style.display === "none" ? "block" : "none";
 }
 
-let to;
+let to
 let filepreview;
-function toggleOption(option) {
+let groupEmail
+ async function toggleOption(option) {
   event.stopPropagation();
   option.classList.toggle("selected");
+  let promises = Array.from(document.getElementsByClassName("selected")).map((option) =>
+    fetch("/select")
+      .then((response) => response.json())
+      .then((dados) => {
+        const userEmail = dados.find(
+          (user) => user.name === option.innerText
+        )?.email;
+       groupEmail = dados
+         .filter((user) => user.group_id === option.innerText)
+         .map((user) => user.email);
 
-  to = Array.from(document.getElementsByClassName("selected")).map(
-    (option) => option.nextElementSibling.innerText
+        return userEmail
+      })
   );
-  document.querySelector(".custom-selector").innerText = to.join(", ");
-  document.getElementById("preview").innerHTML = "";
+  
+  try {
+    let emails = await Promise.all(promises)
+    to = await emails.filter((email) => email !== undefined);
+    to.push(...groupEmail)
+    console.log(to)
 
-  to.forEach((element) => {
-    document.getElementById("preview").innerHTML += `
-      <div class="preview" id="dPreview" style="border: 1px groove #000; padding: 10px; width: 90%">
-     <div>
-          <label for="">Preview</label>
-        </div>
-        <div>
-          <label for="">Para</label>
-          <input type="text" id="" disabled value="${element}">
-        </div>
-        <div>
-          <label for="">Assunto</label>
-          <input type="text" value="${subject.value || ""}" disabled>
-        </div>
-        <div><label for="">Conteudo</label>
-        <div style="word-wrap: break-word; border-style: groove; width: 90%; max-width: 600px;" disabled><p>${
-          document.querySelector(".textarea").value
-        }</p></div>
-      </div>
-      <div>
-        <label for="">Arquivos</label>
-  <span>
-   ${filepreview !== undefined ? filepreview : ""}
-  </span>
-      </div>  
-      </div>`;
-  });
+    if (to.length > 0) {
+      document.querySelector(".custom-selector").innerText = to.join(", ");
+    } else {
+      document.querySelector(".custom-selector").innerText = "Selecione Opções";
+    }
 
-  if (document.querySelector(".custom-selector").innerText === "") {
-    document.querySelector(".custom-selector").innerText = "Selecione Opções";
+      document.getElementById("preview").innerHTML = "";
+    
+      to.forEach((element) => {
+        document.getElementById("preview").innerHTML += `
+          <div class="preview" id="dPreview" style="border: 1px groove #000; padding: 10px; width: 90%">
+         <div>
+              <label for="">Preview</label>
+            </div>
+            <div>
+              <label for="">Para</label>
+              <input type="text" id="" disabled value="${element}">
+            </div>
+            <div>
+              <label for="">Assunto</label>
+              <input type="text" value="${subject.value || ""}" disabled>
+            </div>
+            <div><label for="">Conteudo</label>
+            <div style="word-wrap: break-word; border-style: groove; width: 90%; max-width: 600px;" disabled><p>${
+              document.querySelector(".textarea").value
+            }</p></div>
+          </div>
+          <div>
+            <label for="">Arquivos</label>
+      <span>
+       ${filepreview !== undefined ? filepreview : ""}
+      </span>
+          </div>  
+          </div>`;
+      });
+    
+   /*    if (document.querySelector(".custom-selector").innerText === "") {
+        document.querySelector(".custom-selector").innerText = "Selecione Opções";
+      } */
+    
+  } catch (error) {
+    console.error(error)
   }
 }
 
@@ -187,19 +214,23 @@ async function sendMail() {
 }
 async function getUser() {
   let ul = document.querySelector("ul");
+   const addedIds = new Set();
+
   await fetch("/select")
     .then((res) => res.json())
     .then((dados) => {
       dados.forEach((user) => {
-        ul.innerHTML += `
-      <li class="option" onclick="toggleOption(this)">${user.name}</li>
-      <li style="display: none !important;" hidden=true class="option" onclick="toggleOption(this)">${user.email}</li>
-      
-      `;
+        if(user.group_id === null) {
+          ul.innerHTML += `
+        <li class="option" onclick="toggleOption(this)">${user.name}</li>
+        `;  
+        }
+      if(user.group_id !== null && !addedIds.has(user.group_id)) {
+        ul.innerHTML += `<li class="option" onclick="toggleOption(this)">${user.group_id}</li>`;
+        addedIds.add(user.group_id);
+      }
       });
     })
-  await fetch("/group")
-    .catch((error) => console.log(error));
 }
 getUser();
 

@@ -21,7 +21,7 @@ const cronDate = require("./services/crom");
 const express = require("express");
 const auth = require("./middlewares/auth");
 
-routes.post("/select", async (req, res) => {
+routes.get("/select", async (req, res) => {
   try {
     res.json((await db.dbPromise.query(allUser))[0]);
   } catch (e) {
