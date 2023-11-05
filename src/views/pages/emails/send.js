@@ -4,9 +4,8 @@ function toggleOptions() {
     optionsList.style.display === "none" ? "block" : "none";
 }
 
-let to = []
 let filepreview;
-let groupEmail
+
  async function toggleOption(option) {
   event.stopPropagation();
   option.classList.toggle("selected");
@@ -17,22 +16,35 @@ let groupEmail
         const userEmail = dados.find(
           (user) => user.name === option.innerText
         )?.email;
-       groupEmail = dados
+       const groupEmail = dados
+    /*    .forEach((element => {
+        if(element.group_id === option.innerText) {
+          groupEmail = element.email
+          console.log(groupEmail)
+        }
+       })) */
          .filter((user) => user.group_id === option.innerText)
          .map((user) => user.email);
 
-
-        return userEmail
+        return [userEmail, groupEmail]
       })
   );
   
   try {
     let emails = await Promise.all(promises)
-    to = await emails.filter((email) => email !== undefined);
-
- /*    if(groupEmail !== undefined ) {
-      to = groupEmail
-    } */
+    const to = [];
+    for (const item of emails) {
+      if (item[0] && item[0].includes("@")) {
+        to.push(item[0]);
+      }
+      if (Array.isArray(item[1])) {
+        for (const email of item[1]) {
+          if (email.includes("@")) {
+            to.push(email);
+          }
+        }
+      }
+    }
 
     if (to.length > 0) {
       document.querySelector(".custom-selector").innerText = to.join(", ");
@@ -70,9 +82,6 @@ let groupEmail
           </div>`;
       });
     
-   /*    if (document.querySelector(".custom-selector").innerText === "") {
-        document.querySelector(".custom-selector").innerText = "Selecione Opções";
-      } */
     
   } catch (error) {
     console.error(error)
@@ -124,7 +133,7 @@ text.oninput = subject.oninput = () => {
 
 //files
 let formData = new FormData();
-//
+
 
 document.getElementById("files").addEventListener("change", () => {
   let file = document.getElementById("files").files[0];
