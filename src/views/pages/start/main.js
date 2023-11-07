@@ -6,6 +6,7 @@ async function getUser() {
     .then((res) => res.json())
     .then((dados) => {
       dados.forEach((user) => {
+        console.log(user.group_id)
         tbody.innerHTML += `
                   <tr>
                       <td>${user.name}</td>
@@ -17,6 +18,7 @@ async function getUser() {
                       }</td>
                       </tr>
                   `;
+                  groupTable.innerHTML = ""
         if (user.group_id !== null) {
           if (!userGroups[user.group_id]) {
             userGroups[user.group_id] = [];
@@ -40,16 +42,21 @@ async function postUser(event) {
     document.getElementById("name").value,
     document.getElementById("email").value,
     new Date().toISOString().slice(0, 19).replace("T", " "),
-    document.getElementById("group").value,
+    document.getElementById("group").value !== "" ? document.getElementById("group").value : null,
   ];
 
   fetch("/receber", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ clientInformations }),
-  });
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    if(data.sended) {
+      alert("Erro, email duplicado")
+    }
+  })
 
-  console.log(clientInformations);
   location.reload();
 }
 

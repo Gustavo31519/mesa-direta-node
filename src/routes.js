@@ -28,14 +28,13 @@ routes.get("/select", async (req, res) => {
     res.status(500).json({ message: "Erro interno do servidor" });
   }
 });
-routes.get("/groupSelect", async (req,res) => {
+routes.get("/groupSelect", async (req, res) => {
   try {
-    res.json((await db.dbPromise.query(groupSelect, ["ca"]))[0])
+    res.json((await db.dbPromise.query(groupSelect, ["ca"]))[0]);
   } catch (e) {
-    res.status(500).json({message: "Erro interno do servidor"})
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-})
-
+});
 
 routes.post("/receber", async (req, res) => {
   const clientInformations = req.body.clientInformations;
@@ -46,11 +45,13 @@ routes.post("/receber", async (req, res) => {
       clientInformations[0],
       clientInformations[1],
       clientInformations[2],
-      clientInformations[3]
+      clientInformations[3],
     ]);
   } catch (e) {
     console.error("Erro interno do servidor:", e);
-    res.status(500).send("Erro interno do servidor");
+    if (e.code === "ER_DUP_ENTRY") {
+      res.json({ sended: true });
+    }
   }
 });
 
@@ -90,7 +91,6 @@ routes.post("/delete", async (req, res) => {
 routes.post("/sendmail", (req, res) => {
   const emailInformations = req.body.emailInformations;
 
-
   let mailOptions = {
     from: emailInformations.from,
     to: emailInformations.element,
@@ -104,40 +104,39 @@ routes.post("/sendmail", (req, res) => {
       if (error) {
         console.log(error);
         res.json({ sended: false });
-         unlink(global.files);
+        unlink(global.files);
       } else {
         console.log("E-mail enviado: " + info.response);
         res.json({ sended: true });
-         unlink(global.files);
+        unlink(global.files);
       }
     });
-    
   } else {
     cron.schedule(cronDate(emailInformations.date), () => {
       smtp.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
           res.json({ sended: false });
-          unlink(global.files)
+          unlink(global.files);
         } else {
           console.log("E-mail enviado: " + info.response);
           res.json({ sended: true });
-          unlink(global.files)
+          unlink(global.files);
         }
       });
     });
   }
-    function unlink(files) {
-      files.forEach((element) => {
-        fs.unlink(element.path, (err) => {
-          if (err) {
-            console.error("Erro ao excluir:", err);
-            return;
-          }
-          console.log("Arquivo excluido");
-        });
+  function unlink(files) {
+    files.forEach((element) => {
+      fs.unlink(element.path, (err) => {
+        if (err) {
+          console.error("Erro ao excluir:", err);
+          return;
+        }
+        console.log("Arquivo excluido");
       });
-    } 
+    });
+  }
 });
 
 global.files = [];
