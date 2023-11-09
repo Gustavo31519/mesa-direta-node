@@ -198,10 +198,12 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
       }
     });
 
-    res.json({ message: "Arquivo enviado com sucesso!" });
+    res.json({ sended: true })
   } catch (error) {
     console.error("Erro interno do servidor:", error);
-    res.status(500).send("Erro interno do servidor");
+    const file = req.file;
+    fs.unlink(file.path, (err) => {})
+    res.json({ sended: false, error: error.sqlMessage });
   }
 });
 

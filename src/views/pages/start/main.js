@@ -46,8 +46,8 @@ function deleteGroup(button) {
     .then((response) => response.json())
     .then((data) => {
       if (data.sended) {
-        alert("Grupo deletado")
-        location.reload()
+        alert("Grupo deletado");
+        location.reload();
       }
     });
 }
@@ -195,10 +195,12 @@ function upload() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Arquivo enviado com sucesso:", data);
-        })
-        .catch((error) => {
-          console.error("Erro ao enviar arquivo:", error);
+          if (data.sended) {
+            alert("Arquivo enviado com sucesso");
+            location.reload()
+          } else {
+            alert(data.error);
+          }
         });
     }
   }
