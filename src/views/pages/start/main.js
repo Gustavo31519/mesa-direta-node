@@ -36,7 +36,7 @@ async function getUser() {
 getUser();
 
 async function postUser(event) {
-  event.preventDefault();
+  
 
   const clientInformations = [
     document.getElementById("name").value,
@@ -56,8 +56,6 @@ async function postUser(event) {
       alert("Erro, email duplicado")
     }
   })
-
-  location.reload();
 }
 
 document.getElementById("abrirModal").addEventListener("click", () => {
@@ -76,6 +74,7 @@ window.addEventListener("click", (event) => {
 
 let lastEmail;
 let lastName;
+let lastGroup;
 
 function modal2(button) {
   document.getElementById("meuModal2").style.display = "block";
@@ -91,6 +90,7 @@ function modal2(button) {
   let row = button.parentNode.parentNode;
   lastName = row.getElementsByTagName("td")[0].innerText;
   lastEmail = row.getElementsByTagName("td")[1].innerText;
+  lastGroup = row.getElementsByTagName("td")[4].innerText;  
 }
 
 function updateUser(event) {
@@ -98,15 +98,21 @@ function updateUser(event) {
 
   let upName = document.getElementById("upName").value;
   let upEmail = document.getElementById("upEmail").value;
+  let upGroup = document.getElementById("upGroup").value;
   let updatedAt = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-  if (upName === "" && upEmail === "") {
+  if (upName === "" && upEmail === "" && upGroup === "") {
     alert("Nenhuma alteração");
     return false;
-  } else if (upName === "") {
+  } 
+   if (upName === "") {
     upName = lastName;
-  } else if (upEmail === "") {
+  }  
+  if (upEmail === "") {
     upEmail = lastEmail;
+  }  
+  if (upGroup === "" ) {
+    upGroup = lastGroup
   }
   const clientUpdateInformations = [
     lastName,
@@ -114,6 +120,7 @@ function updateUser(event) {
     upName,
     upEmail,
     updatedAt,
+    upGroup
   ];
 
   console.log(clientUpdateInformations);

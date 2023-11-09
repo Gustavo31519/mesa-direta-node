@@ -64,6 +64,7 @@ routes.post("/update", async (req, res) => {
       clientUpdateInformations[2],
       clientUpdateInformations[3],
       clientUpdateInformations[4],
+      clientUpdateInformations[5],
       clientUpdateInformations[0],
       clientUpdateInformations[1],
     ]);
