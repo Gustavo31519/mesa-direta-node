@@ -17,7 +17,7 @@ async function getUser() {
                       }</td>
                       </tr>
                   `;
-        groupTable.innerHTML = "";
+        groupTable.innerHTML = `<caption></caption><thead><tr><th>Grupos</th><th>Emails</th></tr></thead>`;
         if (user.group_id !== null) {
           if (!userGroups[user.group_id]) {
             userGroups[user.group_id] = [];
@@ -197,7 +197,7 @@ function upload() {
         .then((data) => {
           if (data.sended) {
             alert("Arquivo enviado com sucesso");
-            location.reload()
+            location.reload();
           } else {
             alert(data.error);
           }

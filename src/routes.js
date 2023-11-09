@@ -215,14 +215,19 @@ routes.post("/auth", auth, async (req, res) => {
 
 routes.use(
   "/start",
-  /* auth, */
+  auth,
   express.static(path.join(__dirname, "views/pages/start"))
 );
 routes.use(
   "/emails",
-  /* auth, */
+  auth,
   express.static(path.join(__dirname, "views/pages/emails"))
 );
 routes.use("/login", express.static(path.join(__dirname, "views/pages/login")));
+routes.use("/report", express.static(path.join(__dirname, "views/pages/report")));
+
+routes.get("*", (req,res) => {
+  res.redirect("/start");
+})
 
 module.exports = routes;
