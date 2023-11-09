@@ -8,6 +8,7 @@ const {
   insertXlsxUser,
   insertGroupName,
   groupSelect,
+  deleteGroupQuerry,
 } = require("./helpers/handleMysql");
 const routes = Router();
 const smtp = require("./services/smtp");
@@ -51,7 +52,7 @@ routes.post("/receber", async (req, res) => {
     console.error("Erro interno do servidor:", e);
     if (e.code === "ER_DUP_ENTRY") {
       res.json({ sended: true });
-    }
+    } else{res.json({ sended:  false})}
   }
 });
 
@@ -86,6 +87,17 @@ routes.post("/delete", async (req, res) => {
   } catch (e) {
     console.error("Erro interno do servidor:", e);
     res.status(500).send("Erro interno do servidor");
+  }
+});
+
+routes.post("/deleteGroup", async (req, res) => {
+  const deleteGroup = req.body.deleteGroup;
+  console.log("Informação recebida " + deleteGroup);
+  try {
+    await db.dbPromise.query(deleteGroupQuerry, deleteGroup);
+     res.json({ sended: true });
+  } catch (e) {
+    console.error("Erro interno do servidor:", e);
   }
 });
 

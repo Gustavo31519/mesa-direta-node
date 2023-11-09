@@ -6,7 +6,6 @@ async function getUser() {
     .then((res) => res.json())
     .then((dados) => {
       dados.forEach((user) => {
-        console.log(user.group_id)
         tbody.innerHTML += `
                   <tr>
                       <td>${user.name}</td>
@@ -18,7 +17,7 @@ async function getUser() {
                       }</td>
                       </tr>
                   `;
-                  groupTable.innerHTML = ""
+        groupTable.innerHTML = "";
         if (user.group_id !== null) {
           if (!userGroups[user.group_id]) {
             userGroups[user.group_id] = [];
@@ -30,19 +29,37 @@ async function getUser() {
     .catch((error) => console.log(error));
   for (let groupId in userGroups) {
     let emails = userGroups[groupId].join(", ");
-    groupTable.innerHTML += `<tr><td>${groupId}</td><td>${emails}</td></tr>`;
+    groupTable.innerHTML += `<tr><td>${groupId}</td><td>${emails}</td> <td><button onclick="deleteGroup(this)">Excluir</button></td></tr>`;
   }
 }
 getUser();
 
-async function postUser(event) {
-  
+function deleteGroup(button) {
+  let row = button.parentNode.parentNode;
+  let deleteGroup = row.getElementsByTagName("td")[0].innerText;
 
+  fetch("/deleteGroup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deleteGroup }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.sended) {
+        alert("Grupo deletado")
+        location.reload()
+      }
+    });
+}
+
+async function postUser() {
   const clientInformations = [
     document.getElementById("name").value,
     document.getElementById("email").value,
     new Date().toISOString().slice(0, 19).replace("T", " "),
-    document.getElementById("group").value !== "" ? document.getElementById("group").value : null,
+    document.getElementById("group").value !== ""
+      ? document.getElementById("group").value
+      : null,
   ];
 
   fetch("/receber", {
@@ -50,12 +67,14 @@ async function postUser(event) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ clientInformations }),
   })
-  .then((response) => response.json())
-  .then((data) => {
-    if(data.sended) {
-      alert("Erro, email duplicado")
-    }
-  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.sended) {
+        alert("Erro, email duplicado");
+      } else {
+        location.reload();
+      }
+    });
 }
 
 document.getElementById("abrirModal").addEventListener("click", () => {
@@ -90,7 +109,7 @@ function modal2(button) {
   let row = button.parentNode.parentNode;
   lastName = row.getElementsByTagName("td")[0].innerText;
   lastEmail = row.getElementsByTagName("td")[1].innerText;
-  lastGroup = row.getElementsByTagName("td")[4].innerText;  
+  lastGroup = row.getElementsByTagName("td")[4].innerText;
 }
 
 function updateUser(event) {
@@ -104,15 +123,15 @@ function updateUser(event) {
   if (upName === "" && upEmail === "" && upGroup === "") {
     alert("Nenhuma alteração");
     return false;
-  } 
-   if (upName === "") {
+  }
+  if (upName === "") {
     upName = lastName;
-  }  
+  }
   if (upEmail === "") {
     upEmail = lastEmail;
-  }  
-  if (upGroup === "" ) {
-    upGroup = lastGroup
+  }
+  if (upGroup === "") {
+    upGroup = lastGroup;
   }
   const clientUpdateInformations = [
     lastName,
@@ -120,7 +139,7 @@ function updateUser(event) {
     upName,
     upEmail,
     updatedAt,
-    upGroup
+    upGroup,
   ];
 
   console.log(clientUpdateInformations);
