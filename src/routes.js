@@ -9,6 +9,8 @@ const {
   insertGroupName,
   groupSelect,
   deleteGroupQuerry,
+  insertEmail,
+  allEmail,
 } = require("./helpers/handleMysql");
 const routes = Router();
 const smtp = require("./services/smtp");
@@ -29,6 +31,15 @@ routes.get("/select", async (req, res) => {
     res.status(500).json({ message: "Erro interno do servidor" });
   }
 });
+
+routes.get("/getEmail", async (req, res) => {
+  try {
+    res.json((await db.dbPromise.query(allEmail))[0]);
+  } catch (e) {
+    res.status(500).json({ message: "Erro interno" });
+  }
+});
+
 routes.get("/groupSelect", async (req, res) => {
   try {
     res.json((await db.dbPromise.query(groupSelect, ["ca"]))[0]);
@@ -52,7 +63,9 @@ routes.post("/receber", async (req, res) => {
     console.error("Erro interno do servidor:", e);
     if (e.code === "ER_DUP_ENTRY") {
       res.json({ sended: true });
-    } else{res.json({ sended:  false})}
+    } else {
+      res.json({ sended: false });
+    }
   }
 });
 
@@ -95,13 +108,13 @@ routes.post("/deleteGroup", async (req, res) => {
   console.log("Informação recebida " + deleteGroup);
   try {
     await db.dbPromise.query(deleteGroupQuerry, deleteGroup);
-     res.json({ sended: true });
+    res.json({ sended: true });
   } catch (e) {
     console.error("Erro interno do servidor:", e);
   }
 });
 
-routes.post("/sendmail", (req, res) => {
+routes.post("/sendmail", async (req, res) => {
   const emailInformations = req.body.emailInformations;
 
   let mailOptions = {
@@ -118,10 +131,25 @@ routes.post("/sendmail", (req, res) => {
         console.log(error);
         res.json({ sended: false });
         unlink(global.files);
+        db.dbPromise.query(insertEmail, [
+          "Não enviado",
+          mailOptions.from,
+          mailOptions.to,
+          mailOptions.subject,
+          mailOptions.html,
+        ]);
       } else {
         console.log("E-mail enviado: " + info.response);
         res.json({ sended: true });
         unlink(global.files);
+
+        db.dbPromise.query(insertEmail, [
+          "Enviado",
+          mailOptions.from,
+          mailOptions.to,
+          mailOptions.subject,
+          mailOptions.html,
+        ]);
       }
     });
   } else {
@@ -131,10 +159,24 @@ routes.post("/sendmail", (req, res) => {
           console.log(error);
           res.json({ sended: false });
           unlink(global.files);
+          db.dbPromise.query(insertEmail, [
+            "Não enviado",
+            mailOptions.from,
+            mailOptions.to,
+            mailOptions.subject,
+            mailOptions.html,
+          ]);
         } else {
           console.log("E-mail enviado: " + info.response);
           res.json({ sended: true });
           unlink(global.files);
+          db.dbPromise.query(insertEmail, [
+            "Enviado",
+            mailOptions.from,
+            mailOptions.to,
+            mailOptions.subject,
+            mailOptions.html,
+          ]);
         }
       });
     });
@@ -198,11 +240,11 @@ routes.post("/upload-xlsx", upload.single("file"), async (req, res) => {
       }
     });
 
-    res.json({ sended: true })
+    res.json({ sended: true });
   } catch (error) {
     console.error("Erro interno do servidor:", error);
     const file = req.file;
-    fs.unlink(file.path, (err) => {})
+    fs.unlink(file.path, (err) => {});
     res.json({ sended: false, error: error.sqlMessage });
   }
 });
@@ -224,10 +266,13 @@ routes.use(
   express.static(path.join(__dirname, "views/pages/emails"))
 );
 routes.use("/login", express.static(path.join(__dirname, "views/pages/login")));
-routes.use("/report", express.static(path.join(__dirname, "views/pages/report")));
+routes.use(
+  "/report",
+  express.static(path.join(__dirname, "views/pages/report"))
+);
 
-routes.get("*", (req,res) => {
+routes.get("*", (req, res) => {
   res.redirect("/start");
-})
+});
 
 module.exports = routes;
