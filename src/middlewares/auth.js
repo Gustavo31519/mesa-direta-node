@@ -1,5 +1,5 @@
 const auth = (req, res, next) => {
-  
+require("dotenv").config();
   
   const { username, password } = req.body;
  

@@ -3,9 +3,8 @@ const routes = require("./routes");
 const { port } = require("./services/mysql");
 const smtp = require("./services/smtp");
 const cors = require("cors");
-const path = require("path");
 const session = require("express-session");
-
+require("dotenv").config();
 
 //express
 const app = express();
