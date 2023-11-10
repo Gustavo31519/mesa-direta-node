@@ -14,7 +14,6 @@ require("dotenv").config();
     next();
   } else {
     res.redirect("/login");
-    console.log("Senha Incorreta");
   }
 };
 
