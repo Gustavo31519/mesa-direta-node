@@ -31,8 +31,7 @@
   "bin": "src/index.js",
   "pkg": {
     "assets": [
-      "src/**/*",
-      "./config.json"
+      "src/**/*"
     ]
   }
 }
