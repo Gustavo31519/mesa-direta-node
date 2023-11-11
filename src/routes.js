@@ -125,7 +125,8 @@ routes.post("/sendmail", async (req, res) => {
     html: emailInformations.html,
     attachments: global.files,
   };
-  console.log(mailOptions);
+  console.log (JSON.stringify(mailOptions));
+  
   if (isNaN(Date.parse(emailInformations.date))) {
     smtp.sendMail(mailOptions, (error, info) => {
       if (error) {

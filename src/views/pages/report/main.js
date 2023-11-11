@@ -11,10 +11,10 @@ fetch("/header")
           emailTable.innerHTML += `
             <tr>
                 <td>${email.status}</td>
-                <td>${email.from}</td>
-                <td>${email.to}</td>
+                <td>${email.sender}</td>
+                <td>${email.receiver}</td>
                 <td>${email.subject}</td>
-                <td>${email.html}</td>
+                <td>${email.html_content}</td>
             `;
         });
       });

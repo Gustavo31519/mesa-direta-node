@@ -120,6 +120,9 @@ function updateUser(event) {
   let upGroup = document.getElementById("upGroup").value;
   let updatedAt = new Date().toISOString().slice(0, 19).replace("T", " ");
 
+  console.log(lastGroup)
+  console.log(upGroup)
+
   if (upName === "" && upEmail === "" && upGroup === "") {
     alert("Nenhuma alteração");
     return false;
@@ -130,8 +133,11 @@ function updateUser(event) {
   if (upEmail === "") {
     upEmail = lastEmail;
   }
-  if (upGroup === "") {
+  if (upGroup === "" && lastGroup !== "Sem grupo") {
     upGroup = lastGroup;
+  }
+  if (upGroup === "" && lastGroup === "Sem grupo") {
+    upGroup = null
   }
   const clientUpdateInformations = [
     lastName,
