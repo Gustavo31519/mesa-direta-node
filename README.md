@@ -70,7 +70,7 @@ Agora, em variáveis de ambiente, todas as configurações serão efetivamente c
 
 Abaixo estarão algumas instruções de como usar o código corretamente. Antes de tudo, para dar início, abra o arquivo executável compatível com seu sistema operacional e verifique as logs de funcionamento. No Windows, fica desta maneira.
 
-![Windows](src/views/assets/)
+![Windows](src/views/assets/windows.png) 
 
 Após isso, copie "http://localhost:3333/start" e cole no seu navegador. Você será redirecionado para uma tela de configuração.
 
