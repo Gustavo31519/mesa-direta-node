@@ -62,7 +62,7 @@ A configuração de login apenas cadastra um usuário e senha para acesso ao sit
 
 ### .env
 
-Agora, em variáveis de ambiente, todas as configurações serão efetivamente colocadas em funcionamento. Acesse o arquivo [.env](./.env) e preencha com as informações que criamos nos passos anteriores.
+Agora, em variáveis de ambiente, todas as configurações serão efetivamente colocadas em funcionamento. Acesse o arquivo [.env](./.env.exemple) e preencha com as informações que criamos nos passos anteriores.
 
 ![Env](src/views/assets/dotenvConfig.png)
 
